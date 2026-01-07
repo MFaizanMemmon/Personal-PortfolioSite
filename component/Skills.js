@@ -6,9 +6,9 @@ import Image from 'next/image'
    Programming Languages
 ======================= */
 const languages = [
-  { title: 'C#', icon: '/Assets/Skills/CSharp.png' },
-  { title: 'TypeScript', icon: '/Assets/Skills/TS.png' },
-  { title: 'JavaScript', icon: '/Assets/Skills/JS.png' }
+  { title: 'C#', icon: '/assets/Skills/CSharp.png' },
+  { title: 'TypeScript', icon: '/assets/Skills/TS.png' },
+  { title: 'JavaScript', icon: '/assets/Skills/JS.png' }
 ]
 
 /* =======================
@@ -17,7 +17,7 @@ const languages = [
 const frameworks = [
   {
     title: '.NET Core / ASP.NET',
-    icon: '/Assets/Skills/AspNetCore.png',
+    icon: '/assets/Skills/AspNetCore.png',
     items: [
       'ASP.NET Core Web API',
       'MVC / Razor Pages',
@@ -29,7 +29,7 @@ const frameworks = [
   },
   {
     title: 'Blazor',
-    icon: '/Assets/Skills/BlazorDotNet.png',
+    icon: '/assets/Skills/BlazorDotNet.png',
     items: [
       'Blazor Server',
       'Blazor WebAssembly (WASM)',
@@ -40,7 +40,7 @@ const frameworks = [
   },
   {
     title: 'Angular',
-    icon: '/Assets/Skills/Angular.jpg',
+    icon: '/assets/Skills/Angular.jpg',
     items: [
       'Standalone Components',
       'RxJS & Observables',
@@ -51,7 +51,7 @@ const frameworks = [
   },
   {
     title: 'Next.js / React',
-    icon: '/Assets/Skills/NextJsNew.png',
+    icon: '/assets/Skills/NextJsNew.png',
     items: [
       'App Router',
       'Server & Client Components',
@@ -62,7 +62,7 @@ const frameworks = [
   },
   {
     title: 'Databases',
-    icon: '/Assets/Skills/SqlServer.png',
+    icon: '/assets/Skills/SqlServer.png',
     items: [
       'SQL Server',
       'Stored Procedures',
@@ -73,7 +73,7 @@ const frameworks = [
   },
   {
     title: 'PDF Reports',
-    icon: '/Assets/Skills/PDFLogo.png',
+    icon: '/assets/Skills/PDFLogo.png',
     items: [
       'QuestPDF',
       'iText / PdfSharp',
@@ -84,7 +84,7 @@ const frameworks = [
   },
   {
   title: 'WPF',
-  icon: '/Assets/Skills/WPF.jpg',
+  icon: '/assets/Skills/WPF.jpg',
   items: [
     'XAML UI Design',
     'MVVM Pattern',
@@ -96,7 +96,7 @@ const frameworks = [
 },
 {
   title: '.NET MAUI',
-  icon: '/Assets/Skills/MauiLogo.jpg',
+  icon: '/assets/Skills/MauiLogo.jpg',
   items: [
     'Cross-Platform UI',
     'Android & iOS Apps',

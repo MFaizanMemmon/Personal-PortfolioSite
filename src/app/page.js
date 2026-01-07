@@ -1,7 +1,6 @@
 import About from "../../component/About";
 import ContactMe from "../../component/ContactMe";
 import Header from "../../component/Header";
-import MyWork from "../../component/MyWork";
 import Navbar from "../../component/Navbar";
 import Project from "../../component/Project";
 import Services from "../../component/Services";
