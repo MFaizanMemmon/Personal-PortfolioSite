@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Font */
+* {
+  font-family: 'Outfit', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Body background & font */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-gradient-to-b from-white to-gray-100 text-gray-800 scroll-smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5; /* subtle gray track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b7280; /* Tailwind gray-500 */
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563; /* Tailwind gray-600 */
+}
+
+/* Section scroll-margin-top to fix navbar overlap */
+section {
+  scroll-margin-top: 100px; /* navbar height */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold text-gray-900;
+}
+
+/* Links */
+a {
+  @apply text-gray-700 hover:text-gray-900 transition;
+}
+
+/* Buttons */
+button, a.button {
+  @apply rounded-full font-semibold shadow-md transition;
+}
+
+/* ===== Modern Portfolio Buttons ===== */
+.button-primary {
+  @apply px-6 py-3 rounded-full font-semibold text-white shadow-lg transition-all duration-300 transform flex items-center justify-center gap-2;
+  background: linear-gradient(90deg, #1f2937 0%, #374151 100%);
+  color: white !important; /* Ensure text stays white */
+}
+
+.button-primary:hover {
+  @apply scale-105 shadow-2xl;
+  background: linear-gradient(90deg, #111827 0%, #1f2937 100%);
+  color: white !important; /* Keep hover text white */
+}
+
+
+/* Hero accent circles */
+.hero-accent {
+  @apply absolute rounded-full opacity-20 blur-3xl;
 }
