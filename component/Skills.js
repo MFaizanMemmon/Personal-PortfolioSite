@@ -2,18 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 
-/* =======================
-   Programming Languages
-======================= */
 const languages = [
   { title: 'C#', icon: '/assets/Skills/CSharp.png' },
   { title: 'TypeScript', icon: '/assets/Skills/TS.png' },
   { title: 'JavaScript', icon: '/assets/Skills/JS.png' }
 ]
 
-/* =======================
-   Frameworks, Platforms & PDF
-======================= */
 const frameworks = [
   {
     title: '.NET Core / ASP.NET',
@@ -83,37 +77,35 @@ const frameworks = [
     ]
   },
   {
-  title: 'WPF',
-  icon: '/assets/Skills/WPF.jpg',
-  items: [
-    'XAML UI Design',
-    'MVVM Pattern',
-    'Data Binding',
-    'Custom Controls',
-    'Desktop Applications',
-    'Windows Only'
-  ]
-},
-{
-  title: '.NET MAUI',
-  icon: '/assets/Skills/MauiLogo.jpg',
-  items: [
-    'Cross-Platform UI',
-    'Android & iOS Apps',
-    'Windows & macOS',
-    'MVVM Pattern',
-    'Device APIs',
-    'Blazor Hybrid'
-  ]
-},
-
+    title: 'WPF',
+    icon: '/assets/Skills/WPF.jpg',
+    items: [
+      'XAML UI Design',
+      'MVVM Pattern',
+      'Data Binding',
+      'Custom Controls',
+      'Desktop Applications',
+      'Windows Only'
+    ]
+  },
+  {
+    title: '.NET MAUI',
+    icon: '/assets/Skills/MauiLogo.jpg',
+    items: [
+      'Cross-Platform UI',
+      'Android & iOS Apps',
+      'Windows & macOS',
+      'MVVM Pattern',
+      'Device APIs',
+      'Blazor Hybrid'
+    ]
+  },
 ]
 
 const Skills = () => {
   const [mounted, setMounted] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
 
-  // 🔒 Hydration-safe mount
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -121,12 +113,11 @@ const Skills = () => {
   if (!mounted) return null
 
   return (
-    <section id="skills" className="bg-white px-6 md:px-20 py-20">
+    <section id="skills" className="bg-gray-50 px-6 md:px-20 py-20 font-sans">
       <div className="max-w-6xl mx-auto">
-
         {/* HEADER */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-serif">
             Skills & Technologies
           </h2>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
@@ -136,7 +127,7 @@ const Skills = () => {
 
         {/* LANGUAGES */}
         <div className="mb-20">
-          <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">
+          <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center font-serif">
             Programming Languages
           </h3>
 
@@ -154,7 +145,7 @@ const Skills = () => {
 
         {/* FRAMEWORKS */}
         <div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-8 text-center">
+          <h3 className="text-xl font-semibold text-gray-900 mb-8 text-center font-serif">
             Frameworks, Platforms & PDF
           </h3>
 
@@ -162,18 +153,18 @@ const Skills = () => {
             {frameworks.map((fw, index) => (
               <div
                 key={index}
-                className="border border-gray-200 rounded-xl p-6 flex flex-col hover:shadow-lg transition"
+                className="border border-gray-200 rounded-xl p-6 flex flex-col hover:shadow-2xl transition"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <Image src={fw.icon} alt={fw.title} width={40} height={40} />
-                  <h4 className="text-lg font-semibold text-gray-900">
+                  <h4 className="text-lg font-semibold text-gray-900 font-serif">
                     {fw.title}
                   </h4>
                 </div>
 
                 <ul className="space-y-2 flex-1">
                   {fw.items.map((item, i) => (
-                    <li key={i} className="text-sm text-gray-600">
+                    <li key={i} className="text-sm text-gray-600 font-sans">
                       • {item}
                     </li>
                   ))}
@@ -181,7 +172,7 @@ const Skills = () => {
 
                 <button
                   onClick={() => setShowPopup(true)}
-                  className="mt-6 w-full py-2 rounded-lg border border-gray-900 text-gray-900 font-medium hover:bg-gray-900 hover:text-white transition"
+                  className="mt-6 w-full py-2 rounded-full border border-blue-600 text-blue-600 font-medium hover:bg-blue-600 hover:text-white shadow transition"
                 >
                   See Blog
                 </button>
@@ -194,16 +185,16 @@ const Skills = () => {
       {/* COMING SOON MODAL */}
       {showPopup && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-8 text-center max-w-sm w-full">
-            <h4 className="text-xl font-semibold text-gray-900 mb-2">
+          <div className="bg-white rounded-xl p-8 text-center max-w-sm w-full shadow-lg">
+            <h4 className="text-xl font-semibold text-gray-900 mb-2 font-serif">
               🚧 Coming Soon
             </h4>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-6 font-sans">
               Blogs & PDF guides are under preparation.
             </p>
             <button
               onClick={() => setShowPopup(false)}
-              className="px-6 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition"
+              className="px-6 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-500 transition font-medium"
             >
               Close
             </button>

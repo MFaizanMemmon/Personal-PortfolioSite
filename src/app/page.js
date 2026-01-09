@@ -4,6 +4,7 @@ import Header from "../../component/Header";
 import Navbar from "../../component/Navbar";
 import Project from "../../component/Project";
 import Services from "../../component/Services";
+import SideNav from "../../component/SideNav";
 import Skills from "../../component/Skills";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <Project />
       <Services />
       <ContactMe />
+      <SideNav />
     </>
   );
 }

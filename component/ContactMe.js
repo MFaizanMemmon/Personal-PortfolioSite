@@ -1,19 +1,20 @@
 'use client';
 import React from "react";
-import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiInstagram, FiTwitter, FiYoutube } from "react-icons/fi";
+import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiYoutube } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 const ContactMe = () => {
   return (
     <section
       id="contact"
-      className="bg-gray-50 py-20 px-6 md:px-20 relative"
+      className="bg-gray-50 py-20 px-6 md:px-20 relative font-sans"
     >
+      {/* Section Title */}
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900"
+        className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 font-serif"
       >
         Contact Me
       </motion.h2>
@@ -26,10 +27,10 @@ const ContactMe = () => {
           viewport={{ once: true }}
           className="flex flex-col justify-center space-y-6"
         >
-          <h3 className="text-2xl md:text-3xl font-semibold text-gray-900">
+          <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 font-serif">
             Get in Touch
           </h3>
-          <p className="text-gray-700 leading-relaxed">
+          <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
             I’m open for work opportunities, collaborations, or just to say hi! 
             Feel free to reach out using the form or via social links below.
           </p>
@@ -37,36 +38,30 @@ const ContactMe = () => {
           <div className="space-y-4 text-gray-700">
             <p className="flex items-center gap-2">
               <FiMail className="text-gray-500" /> 
-              <span className="font-medium">Email:</span> faizandeveroper@example.com
+              <span className="font-medium">Email:</span> engineerfaizan56@gmail.com
             </p>
             <p className="flex items-center gap-2">
               <FiPhone className="text-gray-500" /> 
-              <span className="font-medium">Phone:</span> +92 300 1234567
+              <span className="font-medium">Phone:</span> +92 318 9417122
             </p>
             <p className="flex items-center gap-2">
               <FiMapPin className="text-gray-500" /> 
-              <span className="font-medium">Location:</span> Pakistan
+              <span className="font-medium">Location:</span> Pakistan, Sindh
             </p>
           </div>
 
-          {/* Social Media Links */}
-          <div className="flex flex-wrap gap-4 mt-6">
-            <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg shadow-sm transition">
+          {/* Social Media Links in one line */}
+          <div className="flex flex-wrap items-center gap-4 mt-6 justify-start">
+            <a href="https://www.linkedin.com/in/faizan-memon122/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
               <FiLinkedin /> LinkedIn
             </a>
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg shadow-sm transition">
+            <a href="https://github.com/MFaizanMemmon" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
               <FiGithub /> GitHub
             </a>
-            <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg shadow-sm transition">
+            <a href="https://wa.me/923189417122" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
               <FiPhone /> WhatsApp
             </a>
-            <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg shadow-sm transition">
-              <FiTwitter /> Twitter
-            </a>
-            <a href="https://instagram.com/yourusername" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg shadow-sm transition">
-              <FiInstagram /> Instagram
-            </a>
-            <a href="https://youtube.com/yourchannel" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg shadow-sm transition">
+            <a href="https://www.youtube.com/@faizanengineer8811" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
               <FiYoutube /> YouTube
             </a>
           </div>
@@ -74,6 +69,8 @@ const ContactMe = () => {
 
         {/* Contact Form */}
         <motion.form
+          action="https://formspree.io/f/mbdlnnyk"
+          method="POST"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -83,8 +80,10 @@ const ContactMe = () => {
             <label className="block text-gray-700 mb-2 font-medium">Name</label>
             <input
               type="text"
+              name="name"
               placeholder="Your Name"
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+              required
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
           </div>
 
@@ -92,23 +91,27 @@ const ContactMe = () => {
             <label className="block text-gray-700 mb-2 font-medium">Email</label>
             <input
               type="email"
+              name="email"
               placeholder="Your Email"
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+              required
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
           </div>
 
           <div>
             <label className="block text-gray-700 mb-2 font-medium">Message</label>
             <textarea
+              name="message"
               placeholder="Your Message"
               rows={5}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+              required
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-gray-900 text-white font-semibold py-3 rounded-xl hover:bg-gray-800 transition duration-300 shadow-md"
+            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition duration-300 shadow-md"
           >
             Send Message
           </button>
