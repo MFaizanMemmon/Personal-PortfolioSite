@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 const languages = [
-  { title: 'C#', icon: '/assets/Skills/CSharp.png' },
+  {
+    title: 'C#',
+    icon: '/assets/Skills/CSharp.png',
+    blog: 'https://chashprogramming.blogspot.com/'
+  },
   { title: 'TypeScript', icon: '/assets/Skills/TS.png' },
   { title: 'JavaScript', icon: '/assets/Skills/JS.png' }
 ]
@@ -99,7 +103,7 @@ const frameworks = [
       'Device APIs',
       'Blazor Hybrid'
     ]
-  },
+  }
 ]
 
 const Skills = () => {
@@ -115,6 +119,7 @@ const Skills = () => {
   return (
     <section id="skills" className="bg-gray-50 px-6 md:px-20 py-20 font-sans">
       <div className="max-w-6xl mx-auto">
+
         {/* HEADER */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-serif">
@@ -132,14 +137,40 @@ const Skills = () => {
           </h3>
 
           <div className="flex justify-center gap-12 flex-wrap">
-            {languages.map((lang, index) => (
-              <div key={index} className="flex flex-col items-center gap-3">
-                <Image src={lang.icon} alt={lang.title} width={60} height={60} />
-                <span className="text-sm font-medium text-gray-700">
-                  {lang.title}
-                </span>
-              </div>
-            ))}
+            {languages.map((lang, index) => {
+              const Wrapper = lang.blog ? 'a' : 'div'
+
+              return (
+                <Wrapper
+                  key={index}
+                  {...(lang.blog && {
+                    href: lang.blog,
+                    target: '_blank',
+                    rel: 'noopener noreferrer'
+                  })}
+                  className="flex flex-col items-center gap-1 cursor-pointer group"
+                >
+                  <Image
+                    src={lang.icon}
+                    alt={lang.title}
+                    width={60}
+                    height={60}
+                    className="group-hover:scale-105 transition"
+                  />
+
+                  {/* INDICATOR BELOW ICON */}
+                  {lang.blog && (
+                    <span className="text-[11px] text-gray-400">
+                      opens blog ↗
+                    </span>
+                  )}
+
+                  <span className="text-sm font-medium text-gray-700">
+                    {lang.title}
+                  </span>
+                </Wrapper>
+              )
+            })}
           </div>
         </div>
 

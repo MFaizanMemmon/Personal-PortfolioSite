@@ -19,7 +19,7 @@ const services = [
     title: 'Websites',
     description:
       'Static and showcase websites, such as portfolios, business showcase sites, and other informational websites.',
-    image: '/assets/Skills/StaticSite.jpg'
+    image: '/assets/Skills/staticSite.jpg'
   },
   {
     title: 'Mobile Applications',
