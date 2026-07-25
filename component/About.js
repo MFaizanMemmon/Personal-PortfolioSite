@@ -1,138 +1,177 @@
 'use client';
-import React from 'react';
+
 import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
+import { FiAward, FiBookOpen, FiCode, FiLayers } from 'react-icons/fi';
+
+const tools = [
+  { name: 'Visual Studio', src: '/assets/VS2026.svg.png' },
+  { name: 'SQL Server', src: '/assets/SqlServer.jpg' },
+  { name: 'VS Code', src: '/assets/vscode.png' },
+  { name: 'GitHub', src: '/assets/git.png' },
+  { name: 'SQLite', src: '/assets/SqlLiteNew.png' },
+  { name: 'Azure', src: '/assets/Azure.png' },
+];
+
+const cards = [
+  {
+    number: '01',
+    title: 'Languages',
+    icon: FiCode,
+    accent: 'blue',
+    content: 'C#, JavaScript, TypeScript and Visual Basic (VBA)',
+  },
+  {
+    number: '02',
+    title: 'Education',
+    icon: FiBookOpen,
+    accent: 'cyan',
+    content: 'BCOM — Sindh University\nDCBM — Polytechnic College',
+  },
+  {
+    number: '03',
+    title: 'Certifications',
+    icon: FiAward,
+    accent: 'violet',
+    content: '.NET Programming\nInformation Technology',
+  },
+];
 
 const About = () => {
+  const reduceMotion = useReducedMotion();
+
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty('--mouse-x', `${event.clientX - rect.left}px`);
+    event.currentTarget.style.setProperty('--mouse-y', `${event.clientY - rect.top}px`);
+  };
+
   return (
-    <section id="about" className="bg-gray-50 px-6 md:px-20 py-16">
-      {/* Introduction */}
-      <div className="max-w-5xl mx-auto text-center mb-12">
-        <p className="text-lg md:text-xl text-gray-700 uppercase tracking-wider mb-2 font-medium">
-          Introduction
-        </p>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 font-serif">
-          About Me
-        </h2>
-      </div>
+    <section
+      id="about"
+      onPointerMove={handlePointerMove}
+      className="about-section relative overflow-hidden px-6 md:px-20 py-24 md:py-28"
+    >
+      <div className="about-spotlight" aria-hidden="true" />
+      <div className="about-orb about-orb-one" aria-hidden="true" />
+      <div className="about-orb about-orb-two" aria-hidden="true" />
 
-      {/* About Me Section */}
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-16">
-        {/* Left Side Content */}
-        <div className="flex-1 space-y-4 md:space-y-6 text-center md:text-left">
-          <p className="text-gray-700 text-base sm:text-lg md:text-xl leading-relaxed font-sans">
-            I am a Full Stack <span className="font-semibold text-blue-600">.NET Developer</span> from Pakistan with 4+ years of experience building ERP, POS, and enterprise web applications.
-            I have worked with companies like BMC Solution, Appsxone IT Solution, and Intrapreneur, and I also develop my own professional products.
-            I specialize in ASP.NET Core, Web APIs, Angular, Blazor, and React / Next.js, with a strong foundation in finance,
-            accounting systems, and business automation. I am passionate about writing clean code, learning continuously,
-            and building software that creates real-world impact.
-          </p>
-        </div>
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.7 }}
+          className="about-heading mb-14 md:mb-20"
+        >
+          <div className="section-kicker"><span /> My story</div>
+          <h2>Turning business ideas into <em>working software.</em></h2>
+          <p>Four years of learning, building, and solving real operational problems.</p>
+        </motion.div>
 
-        {/* Right Side Image */}
-        <div className="flex-1 flex justify-center md:justify-end">
-          <div className="w-56 sm:w-64 md:w-72 h-56 sm:h-64 md:h-72 rounded-2xl overflow-hidden shadow-lg transform transition-transform duration-500 hover:scale-105 border border-gray-200">
-            <Image
-              src="/assets/FaizanWhiteBg.jpg"
-              alt="Faizan Engineer"
-              width={800}
-              height={800}
-              className="object-cover w-full h-full"
-              priority
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 3 Cards: Languages / Education / Certifications */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-16">
-        {/* Languages Card */}
-        <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition">
-          <div className="w-12 h-12 mb-3">
-            <Image
-              src="/assets/code-icon.png"
-              alt="Programming Languages"
-              width={48}
-              height={48}
-              className="object-contain"
-            />
-          </div>
-          <h5 className="text-gray-900 font-semibold text-sm sm:text-base mb-1 font-serif">
-            Languages
-          </h5>
-          <p className="text-gray-500 text-sm sm:text-base leading-relaxed font-sans">
-            C#, JavaScript, TypeScript, Visual Basic (VBA)
-          </p>
-        </div>
-
-        {/* Education Card */}
-        <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition">
-          <div className="w-12 h-12 mb-3">
-            <Image
-              src="/assets/edu-icon.png"
-              alt="Education"
-              width={48}
-              height={48}
-              className="object-contain"
-            />
-          </div>
-          <h5 className="text-gray-900 font-semibold text-sm sm:text-base mb-1 font-serif">
-            Education
-          </h5>
-          <ul className="text-gray-500 text-sm sm:text-base leading-relaxed list-disc list-inside space-y-1 font-sans">
-            <li>BCOM from Sindh University</li>
-            <li>DCBM from Polytechnic College</li>
-          </ul>
-        </div>
-
-        {/* Certifications Card */}
-        <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition">
-          <div className="w-12 h-12 mb-3">
-            <Image
-              src="/assets/project-icon.png"
-              alt="Certification"
-              width={48}
-              height={48}
-              className="object-contain"
-            />
-          </div>
-          <h5 className="text-gray-900 font-semibold text-sm sm:text-base mb-1 font-serif">
-            Certifications
-          </h5>
-          <ul className="text-gray-500 text-sm sm:text-base leading-relaxed list-disc list-inside space-y-1 font-sans">
-            <li>Certification in .NET Programming</li>
-            <li>Certification in Information Technology</li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Tools I Use */}
-      <div className="max-w-6xl mx-auto">
-        <h3 className="text-2xl font-bold mb-6 text-center md:text-left font-serif">
-          Tools I Use
-        </h3>
-        <div className="flex flex-wrap justify-center md:justify-start gap-4">
-          {[
-            { name: 'Visual Studio', src: '/assets/VS2026.svg.png' },
-            { name: 'SQL Server', src: '/assets/SqlServer.jpg' },
-            { name: 'VSCode', src: '/assets/vscode.png' },
-            { name: 'GitHub', src: '/assets/git.png' },
-            { name: 'SQL Lite', src: '/assets/SqlLiteNew.png' },
-            { name: 'Azure', src: '/assets/Azure.png' },
-          ].map((tool) => (
-            <div
-              key={tool.name}
-              className="w-20 h-20 bg-white rounded-xl flex items-center justify-center shadow-lg hover:shadow-2xl transition"
-            >
-              <Image
-                src={tool.src}
-                alt={tool.name}
-                width={40}
-                height={40}
-                className="object-contain"
-              />
+        <div className="about-intro-grid">
+          <motion.div
+            initial={{ opacity: 0, x: reduceMotion ? 0 : -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.8 }}
+            className="about-story"
+          >
+            <span className="about-eyebrow">Who I am</span>
+            <h3>A developer who understands the business behind the code.</h3>
+            <p>
+              I am a Full Stack <strong>.NET Developer</strong> from Pakistan with 4+ years of
+              experience building ERP, POS, and enterprise web applications. I have worked with
+              BMC Solution, Appsxone IT Solution, and Intrapreneur, while also developing my own
+              professional products.
+            </p>
+            <p>
+              I specialize in ASP.NET Core, Web APIs, Angular, Blazor, and React / Next.js, backed
+              by strong experience in finance, accounting systems, and business automation.
+            </p>
+            <div className="about-principle">
+              <FiLayers />
+              <span><small>My approach</small>Clean code. Clear thinking. Real-world impact.</span>
             </div>
-          ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.9, rotate: reduceMotion ? 0 : 3 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            whileHover={reduceMotion ? undefined : { y: -8, rotate: -1 }}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ duration: 0.8, type: 'spring', stiffness: 90 }}
+            className="about-portrait-wrap"
+          >
+            <div className="about-portrait-lines" aria-hidden="true" />
+            <div className="about-portrait-card">
+              <Image
+                src="/assets/FaizanWhiteBg.jpg"
+                alt="Faizan Engineer"
+                fill
+                sizes="(max-width: 768px) 320px, 420px"
+                className="object-cover"
+              />
+              <div className="portrait-sheen" aria-hidden="true" />
+            </div>
+            <div className="experience-stamp">
+              <strong>4+</strong>
+              <span>Years of<br />experience</span>
+            </div>
+            <div className="location-chip"><span /> Sindh, Pakistan</div>
+          </motion.div>
         </div>
+
+        <div className="about-cards">
+          {cards.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <motion.article
+                key={card.title}
+                initial={{ opacity: 0, y: reduceMotion ? 0 : 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={reduceMotion ? undefined : { y: -10, rotateX: 2, rotateY: index === 1 ? 0 : index === 0 ? -2 : 2 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`about-card about-card-${card.accent}`}
+              >
+                <span className="about-card-number">{card.number}</span>
+                <div className="about-card-icon"><Icon /></div>
+                <h4>{card.title}</h4>
+                <p>{card.content}</p>
+                <div className="card-glow" aria-hidden="true" />
+              </motion.article>
+            );
+          })}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="tools-panel"
+        >
+          <div className="tools-copy">
+            <span>Everyday toolkit</span>
+            <h3>Tools I use to ship</h3>
+          </div>
+          <div className="tools-list">
+            {tools.map((tool, index) => (
+              <motion.div
+                key={tool.name}
+                whileHover={reduceMotion ? undefined : { y: -7, scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="tool-item"
+              >
+                <div className="tool-icon">
+                  <Image src={tool.src} alt="" width={38} height={38} className="object-contain" />
+                </div>
+                <span>{tool.name}</span>
+                <small>{String(index + 1).padStart(2, '0')}</small>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );
