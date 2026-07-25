@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, animateScroll as scroll } from 'react-scroll';
-import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
+import { FiArrowUp, FiChevronDown } from 'react-icons/fi';
+import { AnimatePresence, motion } from 'framer-motion';
 
-const links = ["Home", "About", "Skills", "Projects", "Services", "Contact"];
+const links = ['Home', 'About', 'Skills', 'Projects', 'Services', 'Contact'];
 
 const SideNav = () => {
   const [currentSection, setCurrentSection] = useState('Home');
@@ -13,63 +14,72 @@ const SideNav = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 2;
-
-      // Determine current section
       let active = 'Home';
+
       links.forEach((section) => {
         const el = document.getElementById(section.toLowerCase());
-        if (!el) return;
-        const offsetTop = el.offsetTop;
-        const offsetBottom = offsetTop + el.offsetHeight;
-        if (scrollPos >= offsetTop && scrollPos < offsetBottom) {
+        if (el && scrollPos >= el.offsetTop && scrollPos < el.offsetTop + el.offsetHeight) {
           active = section;
         }
       });
-      setCurrentSection(active);
 
-      // Show up arrow if last section is in view
-      const lastSection = document.getElementById(links[links.length - 1].toLowerCase());
-      if (lastSection) {
-        const rect = lastSection.getBoundingClientRect();
-        setAtLast(rect.top < window.innerHeight / 2);
-      }
+      setCurrentSection(active);
+      const lastSection = document.getElementById('contact');
+      setAtLast(Boolean(lastSection && lastSection.getBoundingClientRect().top < window.innerHeight / 2));
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Get next section for down arrow
-  const getNextSection = () => {
-    const idx = links.findIndex((s) => s === currentSection);
-    if (idx === -1 || idx === links.length - 1) return null;
-    return links[idx + 1].toLowerCase();
-  };
+  const currentIndex = links.indexOf(currentSection);
+  const nextSection = links[Math.min(currentIndex + 1, links.length - 1)];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-600 flex items-center justify-center cursor-pointer shadow-xl hover:bg-blue-700 transition">
+    <motion.div
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.8, duration: 0.6 }}
+      className="section-navigator fixed bottom-5 right-4 sm:bottom-7 sm:right-7 z-50"
+    >
+      <AnimatePresence mode="wait">
         {!atLast ? (
-          <Link
-            to={getNextSection()}
-            smooth
-            duration={700}
-            offset={-100}
-            className="text-white text-2xl md:text-3xl flex items-center justify-center"
-          >
-            <FiArrowDown />
-          </Link>
+          <motion.div key="next" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <Link
+              to={nextSection.toLowerCase()}
+              smooth
+              duration={700}
+              offset={-100}
+              className="section-nav-button cursor-pointer"
+              aria-label={`Scroll to ${nextSection}`}
+            >
+              <span className="section-nav-copy">
+                <small>Next</small>
+                <strong>{nextSection}</strong>
+              </span>
+              <span className="section-nav-icon"><FiChevronDown /></span>
+            </Link>
+          </motion.div>
         ) : (
-          <button
+          <motion.button
+            key="top"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={() => scroll.scrollToTop({ duration: 700 })}
-            className="text-white text-2xl md:text-3xl flex items-center justify-center"
+            className="section-nav-button"
+            aria-label="Back to top"
           >
-            <FiArrowUp />
-          </button>
+            <span className="section-nav-copy">
+              <small>Back to</small>
+              <strong>Top</strong>
+            </span>
+            <span className="section-nav-icon"><FiArrowUp /></span>
+          </motion.button>
         )}
-      </div>
-    </div>
+      </AnimatePresence>
+    </motion.div>
   );
 };
 

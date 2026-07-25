@@ -6,17 +6,21 @@ import Project from "../../component/Project";
 import Services from "../../component/Services";
 import SideNav from "../../component/SideNav";
 import Skills from "../../component/Skills";
+import MotionController from "../../component/MotionController";
 
 export default function Home() {
   return (
     <>
+      <MotionController />
       <Navbar />
-      <Header />
-      <About />
-      <Skills />
-      <Project />
-      <Services />
-      <ContactMe />
+      <main>
+        <Header />
+        <About />
+        <Skills />
+        <Project />
+        <Services />
+        <ContactMe />
+      </main>
       <SideNav />
     </>
   );

@@ -1,124 +1,180 @@
 'use client';
-import React from "react";
-import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiYoutube } from "react-icons/fi";
-import { motion } from "framer-motion";
 
-const ContactMe = () => {
+import { motion, useReducedMotion } from 'framer-motion';
+import {
+  FiArrowUpRight,
+  FiGithub,
+  FiLinkedin,
+  FiMail,
+  FiMapPin,
+  FiMessageCircle,
+  FiPhone,
+  FiSend,
+  FiUser,
+  FiYoutube,
+} from 'react-icons/fi';
+
+const contactDetails = [
+  { label: 'Email me', value: 'engineerfaizan56@gmail.com', href: 'mailto:engineerfaizan56@gmail.com', icon: FiMail },
+  { label: 'Call or WhatsApp', value: '+92 318 9417122', href: 'https://wa.me/923189417122', icon: FiPhone },
+  { label: 'Based in', value: 'Sindh, Pakistan', icon: FiMapPin },
+];
+
+const socials = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/faizan-memon122/', icon: FiLinkedin },
+  { label: 'GitHub', href: 'https://github.com/MFaizanMemmon', icon: FiGithub },
+  { label: 'YouTube', href: 'https://www.youtube.com/@faizanengineer8811', icon: FiYoutube },
+];
+
+export default function ContactMe() {
+  const reduceMotion = useReducedMotion();
+
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty('--contact-x', `${event.clientX - rect.left}px`);
+    event.currentTarget.style.setProperty('--contact-y', `${event.clientY - rect.top}px`);
+  };
+
   return (
-    <section
-      id="contact"
-      className="bg-gray-50 py-20 px-6 md:px-20 relative font-sans"
-    >
-      {/* Section Title */}
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 font-serif"
-      >
-        Contact Me
-      </motion.h2>
+    <section id="contact" onPointerMove={handlePointerMove} className="contact-section relative overflow-hidden px-6 md:px-20 pt-24 md:pt-28">
+      <div className="contact-spotlight" aria-hidden="true" />
+      <div className="contact-orb contact-orb-one" aria-hidden="true" />
+      <div className="contact-orb contact-orb-two" aria-hidden="true" />
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Contact Info */}
+      <div className="relative z-10 max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="flex flex-col justify-center space-y-6"
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: .5 }}
+          className="contact-heading"
         >
-          <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 font-serif">
-            Get in Touch
-          </h3>
-          <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-            I’m open for work opportunities, collaborations, or just to say hi! 
-            Feel free to reach out using the form or via social links below.
-          </p>
-
-          <div className="space-y-4 text-gray-700">
-            <p className="flex items-center gap-2">
-              <FiMail className="text-gray-500" /> 
-              <span className="font-medium">Email:</span> engineerfaizan56@gmail.com
-            </p>
-            <p className="flex items-center gap-2">
-              <FiPhone className="text-gray-500" /> 
-              <span className="font-medium">Phone:</span> +92 318 9417122
-            </p>
-            <p className="flex items-center gap-2">
-              <FiMapPin className="text-gray-500" /> 
-              <span className="font-medium">Location:</span> Pakistan, Sindh
-            </p>
-          </div>
-
-          {/* Social Media Links in one line */}
-          <div className="flex flex-wrap items-center gap-4 mt-6 justify-start">
-            <a href="https://www.linkedin.com/in/faizan-memon122/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
-              <FiLinkedin /> LinkedIn
-            </a>
-            <a href="https://github.com/MFaizanMemmon" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
-              <FiGithub /> GitHub
-            </a>
-            <a href="https://wa.me/923189417122" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
-              <FiPhone /> WhatsApp
-            </a>
-            <a href="https://www.youtube.com/@faizanengineer8811" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-600 hover:text-white border border-gray-300 text-gray-800 font-medium rounded-full shadow-sm transition">
-              <FiYoutube /> YouTube
-            </a>
+          <div className="section-kicker"><span /> Start a conversation</div>
+          <div className="contact-title-row">
+            <h2>Have an idea?<br /><em>Let’s make it real.</em></h2>
+            <div className="contact-availability">
+              <span className="contact-status-dot" />
+              <div>
+                <small>Current availability</small>
+                <strong>Open for new projects</strong>
+              </div>
+            </div>
           </div>
         </motion.div>
 
-        {/* Contact Form */}
-        <motion.form
-          action="https://formspree.io/f/mbdlnnyk"
-          method="POST"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="bg-white p-8 md:p-12 rounded-3xl shadow-xl space-y-6"
-        >
-          <div>
-            <label className="block text-gray-700 mb-2 font-medium">Name</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              required
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 mb-2 font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              required
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 mb-2 font-medium">Message</label>
-            <textarea
-              name="message"
-              placeholder="Your Message"
-              rows={5}
-              required
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition duration-300 shadow-md"
+        <div className="contact-layout">
+          <motion.div
+            initial={{ opacity: 0, x: reduceMotion ? 0 : -35 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: .25 }}
+            className="contact-info-panel"
           >
-            Send Message
-          </button>
-        </motion.form>
+            <div className="contact-intro">
+              <span>Let’s work together</span>
+              <h3>Tell me about the problem you want to solve.</h3>
+              <p>
+                Whether it’s a business application, a customer-facing platform, or an idea
+                that needs shaping, I’d be happy to hear about it.
+              </p>
+            </div>
+
+            <div className="contact-details">
+              {contactDetails.map((detail) => {
+                const Icon = detail.icon;
+                const content = (
+                  <>
+                    <span className="contact-detail-icon"><Icon /></span>
+                    <span className="contact-detail-copy">
+                      <small>{detail.label}</small>
+                      <strong>{detail.value}</strong>
+                    </span>
+                    {detail.href && <FiArrowUpRight className="contact-detail-arrow" />}
+                  </>
+                );
+
+                return detail.href ? (
+                  <a key={detail.label} href={detail.href} target={detail.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="contact-detail">
+                    {content}
+                  </a>
+                ) : (
+                  <div key={detail.label} className="contact-detail">{content}</div>
+                );
+              })}
+            </div>
+
+            <div className="contact-socials">
+              <span>Find me online</span>
+              <div>
+                {socials.map((social) => {
+                  const Icon = social.icon;
+                  return (
+                    <motion.a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={reduceMotion ? undefined : { y: -4 }}
+                      aria-label={social.label}
+                    >
+                      <Icon />
+                      <span>{social.label}</span>
+                    </motion.a>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.form
+            action="https://formspree.io/f/mbdlnnyk"
+            method="POST"
+            initial={{ opacity: 0, x: reduceMotion ? 0 : 35 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: .2 }}
+            className="contact-form"
+          >
+            <div className="contact-form-top">
+              <span className="contact-form-icon"><FiMessageCircle /></span>
+              <div>
+                <small>Send a message</small>
+                <h3>What can I help you build?</h3>
+              </div>
+            </div>
+
+            <div className="contact-fields-row">
+              <label className="contact-field">
+                <span>Your name</span>
+                <div><FiUser /><input type="text" name="name" placeholder="Faizan" autoComplete="name" required /></div>
+              </label>
+              <label className="contact-field">
+                <span>Email address</span>
+                <div><FiMail /><input type="email" name="email" placeholder="you@company.com" autoComplete="email" required /></div>
+              </label>
+            </div>
+
+            <label className="contact-field contact-message-field">
+              <span>Project details</span>
+              <div>
+                <FiMessageCircle />
+                <textarea name="message" placeholder="Tell me a little about your project, goals, and timeline…" rows={6} required />
+              </div>
+            </label>
+
+            <div className="contact-form-footer">
+              <p><span /> I usually reply within one business day.</p>
+              <button type="submit">
+                Send message
+                <span><FiSend /></span>
+              </button>
+            </div>
+          </motion.form>
+        </div>
+
+        <footer className="portfolio-footer">
+          <span>© {new Date().getFullYear()} Faizan Engineer</span>
+          <p>Designed and built with care in Pakistan.</p>
+          <a href="#home">Back to top <FiArrowUpRight /></a>
+        </footer>
       </div>
     </section>
   );
-};
-
-export default ContactMe;
+}
