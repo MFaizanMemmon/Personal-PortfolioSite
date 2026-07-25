@@ -96,10 +96,7 @@ const About = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.9, rotate: reduceMotion ? 0 : 3 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             whileHover={reduceMotion ? undefined : { y: -8, rotate: -1 }}
-            viewport={{ once: true, amount: 0.35 }}
             transition={{ duration: 0.8, type: 'spring', stiffness: 90 }}
             className="about-portrait-wrap"
           >
@@ -109,9 +106,10 @@ const About = () => {
                 src="/assets/FaizanWhiteBg.jpg"
                 alt="Faizan Engineer"
                 fill
-                sizes="(max-width: 768px) 320px, 420px"
-                className="object-cover"
-              />
+              sizes="(max-width: 768px) 320px, 420px"
+              className="object-cover"
+              priority
+            />
               <div className="portrait-sheen" aria-hidden="true" />
             </div>
             <div className="experience-stamp">

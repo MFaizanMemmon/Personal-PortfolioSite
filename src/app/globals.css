@@ -1404,7 +1404,21 @@ a:hover { background: none; -webkit-background-clip: initial; background-clip: i
 
   .about-intro-grid { gap: 58px; }
   .about-story { text-align: left; }
+  .about-portrait-wrap {
+    display: block;
+    width: min(calc(100% - 20px), 380px);
+    min-height: 430px;
+    margin: 18px auto 0;
+    opacity: 1 !important;
+    transform: none;
+  }
   .about-cards { margin-top: 72px; }
+  .tools-panel {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .tools-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tools-copy { text-align: center; }
 
   .skills-title-row,
   .projects-title-row,
@@ -1484,6 +1498,11 @@ a:hover { background: none; -webkit-background-clip: initial; background-clip: i
 
 @media (max-width: 620px) {
   .services-grid { grid-template-columns: 1fr; }
+  .tools-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tool-item {
+    min-width: 0;
+    padding: 16px 6px 13px;
+  }
   .contact-fields-row { grid-template-columns: 1fr; }
   .contact-form-footer { align-items: stretch; flex-direction: column; }
   .contact-form-footer button { justify-content: space-between; width: 100%; }
@@ -1531,8 +1550,17 @@ a:hover { background: none; -webkit-background-clip: initial; background-clip: i
   .experience-stamp { padding: 10px 12px; }
   .experience-stamp strong { font-size: 1.55rem; }
   .location-chip { top: 12px; font-size: 9px; }
+  .about-portrait-wrap {
+    width: calc(100% - 12px);
+    min-height: 0;
+    aspect-ratio: .88;
+  }
   .about-card, .language-card, .framework-card, .compact-service-card { padding: 21px; }
   .tools-panel { padding: 20px; }
+  .tools-list { gap: 8px; }
+  .tool-item span { font-size: 9px; line-height: 1.25; }
+  .tool-icon { width: 45px; height: 45px; }
+  .tool-icon img { width: 34px; height: 34px; }
 
   .language-card { grid-template-columns: 54px 1fr; gap: 15px; }
   .language-icon { width: 54px; height: 54px; }
