@@ -1,204 +1,196 @@
-'use client';
+import Image from "next/image";
+import Link from "next/link";
+import { FiArrowRight, FiArrowUpRight, FiCheck } from "react-icons/fi";
+import PointerGlow from "./PointerGlow";
+import ProjectGallery from "./ProjectGallery";
+import { projects } from "@/data/projects";
+import { blurDataURL, screenshotQuality } from "@/data/image";
 
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import Image from 'next/image';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { FiArrowUpRight, FiCheck, FiGrid, FiImage, FiX } from 'react-icons/fi';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-
-const projects = [
-  {
-    title: 'SQL Server Helper',
-    category: 'Developer Tool',
-    summary: 'A focused desktop toolkit that makes SQL Server administration and database comparison faster.',
-    tags: ['C#', 'SQL Server', 'Desktop'],
-    features: ['Compare database schemas', 'Generate realistic dummy data', 'Track procedures, triggers and tables', 'Transfer data between databases'],
-    images: ['/assets/SqlHelper/Dashboard.jpg', '/assets/SqlHelper/Connection.jpg', '/assets/SqlHelper/TrackStoreProcedures.jpg', '/assets/SqlHelper/DBCompare.jpg'],
-  },
-  {
-    title: 'Restaurant Management System',
-    category: 'Business Platform',
-    summary: 'An end-to-end restaurant operations platform—from table service and billing to kitchen and reporting.',
-    tags: ['POS', '.NET', 'Reporting'],
-    features: ['Billing and point of sale', 'Kitchen token management', 'Delivery tracking', 'Multi-user support', 'Expense and cash management', 'Table and staff management'],
-    images: ['/assets/Restaurant_Management/Billing.jpg', '/assets/Restaurant_Management/Dashboard.jpg', '/assets/Restaurant_Management/POS.jpg', '/assets/Restaurant_Management/Products.jpg', '/assets/Restaurant_Management/Staff.jpg', '/assets/Restaurant_Management/Tables.jpg'],
-  },
-  {
-    title: 'Wheat Shop Accounting',
-    category: 'Accounting System',
-    summary: 'Purpose-built accounting software for grain businesses with multilingual workflows and clear reporting.',
-    tags: ['Accounting', 'Invoices', 'Desktop'],
-    features: ['Multi-language support', 'Customer and invoice management', 'Expense tracking', 'Reports and dashboards'],
-    images: ['/assets/AnajPOS/CreateCustomer.jpg', '/assets/AnajPOS/Invoices.jpg', '/assets/AnajPOS/Customer-Receiving-Voucher.jpg', '/assets/AnajPOS/Manage-Expenses.jpg', '/assets/AnajPOS/Report-Dashboard.jpg'],
-  },
-  {
-    title: 'Enterprise ERP System',
-    category: 'Flagship Product',
-    summary: 'A secure, multi-branch ERP connecting sales, accounting, inventory and business reporting.',
-    tags: ['ASP.NET Core 8', 'ERP', 'MVC'],
-    features: ['Multi-branch architecture', 'Role-based access', 'Sales, accounting and inventory', 'Counter sales and printing', 'Financial reports', 'Secure authentication'],
-    images: ['/assets/Electron-Erp/Dashboard.jpg', '/assets/Electron-Erp/CounterSale.jpg', '/assets/Electron-Erp/CounterSaleReceipt.jpg', '/assets/Electron-Erp/SaleOrder.jpg', '/assets/Electron-Erp/SaleOrderPrint.jpg', '/assets/Electron-Erp/General Journal Voucher.jpg', '/assets/Electron-Erp/Reports.jpg', '/assets/Electron-Erp/Multi-Theme.jpg', '/assets/Electron-Erp/UserProfile.jpg'],
-  },
-  {
-    title: 'Job Listing System',
-    category: 'Web Application',
-    summary: 'A fast, SEO-ready hiring platform with customer portals and role-specific administration.',
-    tags: ['Blazor SSR', '.NET 8', 'Auth'],
-    features: ['Server-side rendering', 'Secure authentication', 'Admin and user dashboards', 'Job and category management', 'Customer portal', 'Permission handling'],
-    images: ['/assets/JLS/JLS-CustomerPortal-3.jpg', '/assets/JLS/JLS-LoginPage.jpg', '/assets/JLS/JLS-ShowCategory.jpg', '/assets/JLS/JLS-Dashboard.jpg', '/assets/JLS/JLS-DashboardWithAdmin.jpg', '/assets/JLS/JLS-DashboardWithAdmins.jpg', '/assets/JLS/JLS-DashboardWithUser.jpg', '/assets/JLS/JLS-AccessDenide.jpg', '/assets/JLS/JLS-CreateJob.jpg', '/assets/JLS/JLS-CustomerPortal-2.jpg'],
-  },
-];
-
-export default function Project() {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [mounted, setMounted] = useState(false);
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = selectedProject ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [selectedProject]);
-
-  const handlePointerMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty('--projects-x', `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty('--projects-y', `${event.clientY - rect.top}px`);
-  };
-
+function ProjectTagList({ project }) {
+  const tags = project.techGroups.flatMap((group) => group.items).slice(0, 4);
   return (
-    <section id="projects" onPointerMove={handlePointerMove} className="projects-section relative overflow-hidden px-6 md:px-20 py-24 md:py-28">
-      <div className="projects-spotlight" aria-hidden="true" />
-      <div className="projects-orb projects-orb-one" aria-hidden="true" />
-      <div className="projects-orb projects-orb-two" aria-hidden="true" />
+    <ul className="project-tags" aria-label={`Technologies used in ${project.title}`}>
+      {tags.map((tag) => (
+        <li key={tag}>{tag}</li>
+      ))}
+    </ul>
+  );
+}
 
-      <div className="relative z-10 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: reduceMotion ? 0 : 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: .5 }}
-          className="projects-heading"
-        >
-          <div className="section-kicker"><span /> Selected work</div>
-          <div className="projects-title-row">
-            <h2>Products built around<br /><em>real business needs.</em></h2>
-            <div className="projects-heading-note">
-              <span><FiGrid /> 05 case studies</span>
-              <p>Desktop, web, ERP and operational systems designed to make complex work feel simple.</p>
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="projects-showcase">
-          {projects.map((project, index) => (
-            <motion.article
-              key={project.title}
-              initial={{ opacity: 0, y: reduceMotion ? 0 : 38 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              whileHover={reduceMotion ? undefined : { y: -8 }}
-              viewport={{ once: true, amount: .16 }}
-              transition={{ duration: .65, delay: (index % 3) * .08 }}
-              onClick={() => setSelectedProject(project)}
-              className={`project-showcase-card project-card-${index + 1}`}
-            >
-              <div className="project-visual">
-                <Image
-                  src={project.images[0]}
-                  alt={`${project.title} interface`}
-                  fill
-                  sizes={index === 0 || index === 3 ? '(max-width: 900px) 100vw, 64vw' : '(max-width: 900px) 100vw, 36vw'}
-                  className="object-cover object-top"
-                />
-                <div className="project-visual-overlay" />
-                <span className="project-count">{String(index + 1).padStart(2, '0')}</span>
-                <span className="project-gallery-count"><FiImage /> {project.images.length} screens</span>
-                <button className="project-open" aria-label={`View ${project.title}`}>
-                  <FiArrowUpRight />
-                </button>
-              </div>
-
-              <div className="project-body">
-                <span className="project-category">{project.category}</span>
-                <h3>{project.title}</h3>
-                <p>{project.summary}</p>
-                <div className="project-tags">
-                  {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
-                </div>
-              </div>
-            </motion.article>
+function ProjectCard({ project, index }) {
+  return (
+    <article
+      className="project-card"
+      data-reveal="up"
+      style={{ "--reveal-index": Math.min(index, 4) }}
+    >
+      <Link
+        className="project-card-visual"
+        href={`/projects/${project.slug}`}
+        aria-label={`View the ${project.title} case study`}
+      >
+        <Image
+          src={project.cardImage}
+          alt={project.cardAlt}
+          fill
+          sizes="(max-width: 800px) 100vw, 50vw"
+          quality={screenshotQuality}
+          placeholder="blur"
+          blurDataURL={blurDataURL}
+          className="project-card-image"
+        />
+        <span className="project-index">{String(index + 1).padStart(2, "0")}</span>
+        <span className="project-card-overlay" aria-hidden="true">
+          <span>
+            View case study
+            <FiArrowUpRight />
+          </span>
+        </span>
+      </Link>
+      <div className="project-card-body">
+        <p className="project-category">{project.category}</p>
+        <h3>
+          <Link href={`/projects/${project.slug}`}>{project.title}</Link>
+        </h3>
+        <p>{project.summary}</p>
+        <ul className="project-feature-list">
+          {project.features.slice(0, 3).map((feature) => (
+            <li key={feature}>
+              <FiCheck aria-hidden="true" />
+              {feature}
+            </li>
           ))}
+        </ul>
+        <ProjectTagList project={project} />
+        <div className="project-card-actions">
+          <Link className="text-link" href={`/projects/${project.slug}`}>
+            View case study
+            <FiArrowRight aria-hidden="true" />
+          </Link>
+          <ProjectGallery
+            images={project.gallery}
+            projectTitle={project.title}
+            projectSlug={project.slug}
+            mode="trigger"
+          />
         </div>
       </div>
+    </article>
+  );
+}
 
-      {mounted && createPortal(
-        <AnimatePresence>
-          {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="project-modal-backdrop"
-            onClick={() => setSelectedProject(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: .94, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: .96, y: 20 }}
-              transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-              onClick={(event) => event.stopPropagation()}
-              className="project-modal"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="project-modal-title"
+export default function Project() {
+  const featured = projects.find((project) => project.featured);
+  const others = projects.filter((project) => !project.featured);
+
+  return (
+    <section id="work" className="section section-work">
+      <div className="section-shell">
+        <div className="section-heading work-heading" data-reveal="up">
+          <p className="eyebrow">Selected work</p>
+          <div className="work-heading-row">
+            <h2>
+              Systems built around <em>how the work actually happens.</em>
+            </h2>
+            <div className="work-heading-note">
+              <span>05 case studies</span>
+              <p>
+                ERP, POS, accounting, desktop utilities and web applications. Every project
+                below uses screenshots from the real build.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {featured && (
+          <article className="featured-project" data-reveal="scale">
+            <Link
+              className="featured-visual"
+              href={`/projects/${featured.slug}`}
+              aria-label={`View the ${featured.title} case study`}
             >
-              <button onClick={() => setSelectedProject(null)} className="project-modal-close" aria-label="Close project"><FiX /></button>
-              <div className="project-modal-layout">
-                <div className="project-modal-gallery">
-                  <Swiper
-                    spaceBetween={18}
-                    slidesPerView={1}
-                    navigation
-                    pagination={{ clickable: true }}
-                    modules={[Navigation, Pagination]}
-                    className="project-swiper"
-                  >
-                    {selectedProject.images.map((image, index) => (
-                      <SwiperSlide key={image}>
-                        <div className="project-slide">
-                          <Image src={image} alt={`${selectedProject.title} screen ${index + 1}`} fill sizes="(max-width: 900px) 100vw, 65vw" className="object-contain" />
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
-                <div className="project-modal-copy">
-                  <span className="project-category">{selectedProject.category}</span>
-                  <h3 id="project-modal-title">{selectedProject.title}</h3>
-                  <p>{selectedProject.summary}</p>
-                  <div className="project-modal-tags">
-                    {selectedProject.tags.map((tag) => <span key={tag}>{tag}</span>)}
+              <Image
+                src={featured.cardImage}
+                alt={featured.cardAlt}
+                fill
+                sizes="(max-width: 900px) 100vw, 60vw"
+                quality={screenshotQuality}
+                placeholder="blur"
+                blurDataURL={blurDataURL}
+                className="featured-image"
+              />
+              <span className="featured-badge">Flagship project</span>
+              <span className="featured-visual-note">
+                <span>Enterprise ERP</span>
+                <p>Sales · Purchasing · Inventory · Ledger</p>
+              </span>
+              <span className="featured-overlay" aria-hidden="true">
+                <span>
+                  Open case study
+                  <FiArrowUpRight />
+                </span>
+              </span>
+            </Link>
+
+            <div className="featured-body">
+              <p className="project-category">{featured.category}</p>
+              <h3>{featured.title}</h3>
+              <p className="featured-summary">{featured.summary}</p>
+
+              <div className="featured-flow" aria-label="Core ERP transaction flow">
+                {featured.workflow.map((item, index) => (
+                  <div key={item.title}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <strong>{item.title}</strong>
                   </div>
-                  <h4>Core capabilities</h4>
-                  <ul>
-                    {selectedProject.features.map((feature) => <li key={feature}><FiCheck /> {feature}</li>)}
-                  </ul>
-                </div>
+                ))}
               </div>
-            </motion.div>
-          </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+
+              <ul className="featured-features">
+                {featured.features.slice(0, 5).map((feature) => (
+                  <li key={feature}>
+                    <FiCheck aria-hidden="true" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <ProjectTagList project={featured} />
+
+              <div className="featured-actions">
+                <Link className="button button-primary" href={`/projects/${featured.slug}`}>
+                  Read the ERP case study
+                  <FiArrowUpRight aria-hidden="true" />
+                </Link>
+                <ProjectGallery
+                  images={featured.gallery}
+                  projectTitle={featured.title}
+                  projectSlug={featured.slug}
+                  mode="trigger"
+                />
+              </div>
+            </div>
+          </article>
+        )}
+
+        <div className="project-grid" data-reveal-group>
+          {others.map((project, index) => (
+            <ProjectCard key={project.slug} project={project} index={index + 1} />
+          ))}
+        </div>
+
+        <div className="work-note" data-reveal="up">
+          <p>
+            Screenshots are from working builds. Customer names, contact details and connection
+            information have been redacted before publication.
+          </p>
+          <a className="text-link" href="#engineering">
+            See how I engineer these systems
+            <FiArrowRight aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+      <PointerGlow selector=".project-card" />
     </section>
   );
 }

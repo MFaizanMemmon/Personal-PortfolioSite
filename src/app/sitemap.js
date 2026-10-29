@@ -1,18 +1,30 @@
-const siteUrl = "https://faizan-portfolio-site.vercel.app";
+import { projects } from "@/data/projects";
+import { site } from "@/data/site";
 
 export default function sitemap() {
+  const lastModified = new Date();
+
+  const projectPages = projects.map((project) => ({
+    url: `${site.url}/projects/${project.slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: project.featured ? 0.9 : 0.75,
+    images: project.gallery.slice(0, 4).map((image) => `${site.url}${image.src}`),
+  }));
+
   return [
     {
-      url: siteUrl,
-      lastModified: new Date("2026-07-25"),
+      url: site.url,
+      lastModified,
       changeFrequency: "monthly",
       priority: 1,
       images: [
-        `${siteUrl}/assets/FaizanDpNew.jpg`,
-        `${siteUrl}/assets/SqlHelper/Dashboard.jpg`,
-        `${siteUrl}/assets/Electron-Erp/Dashboard.jpg`,
-        `${siteUrl}/assets/Restaurant_Management/Dashboard.jpg`,
+        `${site.url}/assets/FaizanDpNew.jpg`,
+        `${site.url}/assets/Electron-Erp/Dashboard.jpg`,
+        `${site.url}/assets/Restaurant_Management/POS.jpg`,
+        `${site.url}/assets/AnajPOS/Invoices.jpg`,
       ],
     },
+    ...projectPages,
   ];
 }

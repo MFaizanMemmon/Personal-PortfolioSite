@@ -1,119 +1,166 @@
-'use client';
+import { Fragment } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  FiArrowDown,
+  FiArrowDownRight,
+  FiArrowRight,
+  FiArrowUpRight,
+  FiDownload,
+  FiMapPin,
+} from "react-icons/fi";
+import HeroFx from "./HeroFx";
+import { site } from "@/data/site";
 
-import Image from 'next/image';
-import { Link } from 'react-scroll';
-import { motion, useReducedMotion } from 'framer-motion';
-import { FiArrowRight, FiDownload, FiMail } from 'react-icons/fi';
+const heroFacts = [
+  { value: "3+", label: "Years building business software" },
+  { value: "05", label: "Detailed project case studies" },
+  { value: "ERP", label: "Flagship enterprise build" },
+];
 
-const ease = [0.22, 1, 0.36, 1];
+const headlineWords = ["Full", "Stack", ".NET", "Engineer"];
+const subtitleWords = ["Building", "ERP,", "POS", "&", "enterprise", "software."];
 
-const Header = () => {
-  const reduceMotion = useReducedMotion();
-  const reveal = {
-    hidden: { opacity: 0, y: reduceMotion ? 0 : 34 },
-    visible: { opacity: 1, y: 0 },
-  };
-
+export default function Header() {
   return (
-    <header
-      id="home"
-      className="hero-section relative min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-b from-white to-gray-100 px-6 sm:px-10 md:px-20 text-center md:text-left pt-28 md:pt-32 pb-16 gap-14 md:gap-20 overflow-hidden"
-    >
-      <div className="hero-glow hero-glow-one" aria-hidden="true" />
-      <div className="hero-glow hero-glow-two" aria-hidden="true" />
-      <div className="hero-grid" aria-hidden="true" />
+    <section id="home" className="hero">
+      <HeroFx />
+      <div className="hero-grid-lines" aria-hidden="true" />
+      <div className="hero-orb hero-orb-a" aria-hidden="true" />
+      <div className="hero-orb hero-orb-b" aria-hidden="true" />
 
-      <motion.div
-        initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.82 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, ease }}
-        className="portrait-stage relative flex-shrink-0 w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96"
-      >
-        <div className="portrait-aura" aria-hidden="true" />
-        <div className="portrait-orbit portrait-orbit-outer" aria-hidden="true">
-          <span className="orbit-dot orbit-dot-blue" />
-          <span className="orbit-label">.NET</span>
+      <div className="hero-inner">
+        <div className="hero-copy">
+          <div className="hero-availability hero-enter" style={{ "--enter": 0 }}>
+            <span className="pulse-dot" aria-hidden="true" />
+            <span>{site.availability}</span>
+          </div>
+
+          <p className="hero-kicker hero-enter" style={{ "--enter": 1 }}>
+            Muhammad Faizan <span aria-hidden="true">/</span> Sindh, Pakistan
+          </p>
+
+          <h1 className="hero-title">
+            <span className="hero-line">
+              {headlineWords.map((word, index) => (
+                <Fragment key={word}>
+                  <span
+                    className={`hero-word ${word === ".NET" ? "hero-word-accent" : ""}`}
+                    style={{ "--i": index }}
+                  >
+                    {word === ".NET" ? <em>.NET</em> : word}
+                  </span>{" "}
+                </Fragment>
+              ))}
+            </span>
+            <span className="hero-title-second">
+              {subtitleWords.map((word, index) => (
+                <Fragment key={`${word}-${index}`}>
+                  <span
+                    className="hero-word hero-word-sub"
+                    style={{ "--i": index }}
+                  >
+                    {word}
+                  </span>{" "}
+                </Fragment>
+              ))}
+            </span>
+          </h1>
+
+          <p className="hero-summary hero-enter" style={{ "--enter": 6 }}>
+            {site.summary}
+          </p>
+
+          <div className="hero-actions hero-enter" style={{ "--enter": 7 }}>
+            <a className="button button-primary" href="#work">
+              Explore my projects
+              <FiArrowRight aria-hidden="true" />
+            </a>
+            <a className="button button-secondary" href={site.resume} download>
+              <FiDownload aria-hidden="true" />
+              Download resume
+            </a>
+            <a className="text-link" href="#contact">
+              Let&apos;s work together
+              <FiArrowDownRight aria-hidden="true" />
+            </a>
+          </div>
+
+          <dl className="hero-facts">
+            {heroFacts.map((fact, index) => (
+              <div key={fact.label} className="hero-enter" style={{ "--enter": 8 + index }}>
+                <dt>{fact.value}</dt>
+                <dd>{fact.label}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-        <div className="portrait-orbit portrait-orbit-inner" aria-hidden="true">
-          <span className="orbit-dot orbit-dot-cyan" />
-          <span className="orbit-label orbit-label-code">C#</span>
-        </div>
-        <div className="portrait-frame">
-          <div className="portrait-image">
-            <Image
-              src="/assets/FaizanDpNew.jpg"
-              alt="Faizan Engineer"
-              fill
-              sizes="(max-width: 768px) 288px, 384px"
-              className="object-cover"
-              priority
-            />
+
+        <div className="hero-visual">
+          <div className="portrait-card hero-portrait">
+            <div className="portrait-image-wrap">
+              <Image
+                src="/assets/FaizanDpNew.jpg"
+                alt="Faizan Engineer, full stack .NET developer"
+                fill
+                priority
+                sizes="(max-width: 900px) 82vw, 500px"
+                className="portrait-image"
+              />
+              <span className="portrait-sheen" aria-hidden="true" />
+            </div>
+            <div className="portrait-caption">
+              <div>
+                <strong>Faizan</strong>
+                <span>Full Stack .NET Engineer</span>
+              </div>
+              <p>
+                <FiMapPin aria-hidden="true" /> Sindh, PK
+              </p>
+            </div>
+          </div>
+
+          <div className="hero-note hero-note-top" aria-hidden="true">
+            <span>01</span>
+            <p>Enterprise systems</p>
+          </div>
+          <div className="hero-note hero-note-bottom" aria-hidden="true">
+            <span>Focus</span>
+            <p>ERP · POS · Accounting</p>
+          </div>
+
+          <div className="hero-code-wrap">
+            <Link
+              className="hero-code-card"
+              href="/projects/enterprise-erp"
+              aria-label="Explore the Enterprise ERP case study"
+            >
+              <span className="hero-code-label">
+                <span className="hero-code-dot" aria-hidden="true" />
+                Currently building
+              </span>
+              <p>Branch-aware ERP workflows</p>
+              <div className="hero-code-tags">
+                <span>ASP.NET Core</span>
+                <span>SQL Server</span>
+                <span>POS</span>
+              </div>
+              <span className="hero-code-cta">
+                View case study
+                <FiArrowUpRight aria-hidden="true" />
+              </span>
+            </Link>
           </div>
         </div>
-        <div className="availability-badge">
-          <span className="availability-dot" />
-          Available for work
-        </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        transition={{ staggerChildren: reduceMotion ? 0 : 0.12, delayChildren: 0.15 }}
-        className="flex-1 max-w-2xl space-y-5 z-10"
-      >
-        <motion.div variants={reveal} transition={{ duration: 0.7, ease }} className="hero-intro">
-          <span className="hero-intro-line" aria-hidden="true" />
-          <span>Hi, I am</span>
-          <span className="hero-name">Faizan</span>
-          <span className="hero-wave" aria-hidden="true">👋</span>
-        </motion.div>
-
-        <motion.h1
-          variants={reveal}
-          transition={{ duration: 0.8, ease }}
-          className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-bold text-gray-900 leading-[1.06] tracking-tight"
-        >
-          <span className="heading-line">Full Stack</span>
-          <span className="heading-line">
-            <span className="heading-accent">.NET</span> Developer
-          </span>
-        </motion.h1>
-
-        <motion.h2 variants={reveal} transition={{ duration: 0.7, ease }} className="text-lg sm:text-xl text-gray-700">
-          Building reliable digital products from <strong className="text-gray-900">Pakistan</strong>
-        </motion.h2>
-
-        <motion.p
-          variants={reveal}
-          transition={{ duration: 0.7, ease }}
-          className="text-gray-700 text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl"
-        >
-          I am a full stack developer from Sindh, Pakistan, with 4 years of
-          experience across BMC Solution, Appsxone IT Solution, Intrapreneur,
-          and my own products. I build professional and efficient software.
-        </motion.p>
-
-        <motion.div variants={reveal} transition={{ duration: 0.7, ease }} className="pt-2 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-          <Link
-            to="contact"
-            smooth
-            duration={700}
-            offset={-100}
-            className="hero-button hero-button-primary cursor-pointer"
-          >
-            <FiMail />
-            Contact Me
-            <FiArrowRight className="button-arrow" />
-          </Link>
-          <a href="/assets/Faizan%20.Net%20Developer.pdf" download className="hero-button hero-button-secondary">
-            <FiDownload />
-            My Resume
-          </a>
-        </motion.div>
-      </motion.div>
-    </header>
+      <a className="hero-scroll" href="#about" aria-label="Scroll to the about section">
+        <span className="hero-scroll-label">Scroll to explore</span>
+        <span className="hero-scroll-line" aria-hidden="true">
+          <span />
+        </span>
+        <FiArrowDown aria-hidden="true" />
+      </a>
+    </section>
   );
-};
-
-export default Header;
+}

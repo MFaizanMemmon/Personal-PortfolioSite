@@ -1,141 +1,91 @@
-'use client';
+import {
+  FiArrowRight,
+  FiBarChart2,
+  FiDatabase,
+  FiGlobe,
+  FiLayers,
+  FiMonitor,
+  FiShoppingBag,
+} from "react-icons/fi";
+import PointerGlow from "./PointerGlow";
+import { services } from "@/data/site";
 
-import Image from 'next/image';
-import { Link } from 'react-scroll';
-import { motion, useReducedMotion } from 'framer-motion';
-import { FiArrowRight, FiCheck, FiGlobe, FiLayout, FiMonitor, FiSmartphone } from 'react-icons/fi';
-
-const services = [
-  {
-    number: '01',
-    title: 'Windows Applications',
-    shortTitle: 'Desktop',
-    description: 'Reliable custom software designed around your daily business operations and team workflows.',
-    deliverables: ['Business management', 'SQL Server tools', 'POS and restaurant systems'],
-    image: '/assets/Skills/winformapp.jpg',
-    icon: FiMonitor,
-    accent: 'blue',
-  },
-  {
-    number: '02',
-    title: 'Web Applications',
-    shortTitle: 'Web apps',
-    description: 'Scalable, secure platforms with clean customer experiences and powerful administration.',
-    deliverables: ['ERP and business portals', 'E-commerce platforms', 'API-driven applications'],
-    image: '/assets/Skills/FullStack.jpg',
-    icon: FiGlobe,
-    accent: 'violet',
-  },
-  {
-    number: '03',
-    title: 'Professional Websites',
-    shortTitle: 'Websites',
-    description: 'Fast, responsive websites that communicate your value clearly and build trust with customers.',
-    deliverables: ['Portfolio websites', 'Business showcase sites', 'SEO-friendly experiences'],
-    image: '/assets/Skills/staticSite.jpg',
-    icon: FiLayout,
-    accent: 'cyan',
-  },
-  {
-    number: '04',
-    title: 'Mobile Applications',
-    shortTitle: 'Mobile',
-    description: 'Purpose-built mobile products that bring essential business workflows into your customers’ hands.',
-    deliverables: ['Appointment systems', 'QR selling workflows', 'Cross-platform applications'],
-    image: '/assets/Skills/MobileApp.jpg',
-    icon: FiSmartphone,
-    accent: 'indigo',
-  },
-];
+const serviceIcons = {
+  erp: FiLayers,
+  pos: FiShoppingBag,
+  web: FiGlobe,
+  desktop: FiMonitor,
+  database: FiDatabase,
+  report: FiBarChart2,
+};
 
 export default function Services() {
-  const reduceMotion = useReducedMotion();
-
-  const handlePointerMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty('--services-x', `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty('--services-y', `${event.clientY - rect.top}px`);
-  };
-
   return (
-    <section id="services" onPointerMove={handlePointerMove} className="services-section relative overflow-hidden px-6 md:px-20 py-24 md:py-28">
-      <div className="services-spotlight" aria-hidden="true" />
-      <div className="services-shape services-shape-one" aria-hidden="true" />
-      <div className="services-shape services-shape-two" aria-hidden="true" />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: reduceMotion ? 0 : 26 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: .5 }}
-          className="services-heading"
-        >
-          <div className="section-kicker"><span /> What I can build</div>
-          <div className="services-title-row">
-            <h2>From a business challenge<br />to a <em>finished product.</em></h2>
+    <section id="services" className="section section-services">
+      <div className="section-shell">
+        <div className="section-heading services-heading" data-reveal="up">
+          <p className="eyebrow">Freelance services</p>
+          <div className="services-heading-row">
+            <h2>
+              Practical software for <em>specific business problems.</em>
+            </h2>
             <div>
-              <p>Thoughtful software across desktop, web, and mobile—designed for the way your business actually works.</p>
-              <Link to="contact" smooth duration={700} offset={-100} className="services-heading-link cursor-pointer">
-                Discuss your project <FiArrowRight />
-              </Link>
+              <p className="section-intro">
+                I take on focused builds where the requirement is clear and the software has to
+                hold up in daily use. No guaranteed delivery dates or invented client metrics.
+              </p>
+              <a className="text-link" href="#contact">
+                Discuss your project
+                <FiArrowRight aria-hidden="true" />
+              </a>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        <div className="services-grid">
+        <div className="service-grid" data-reveal-group>
           {services.map((service, index) => {
-            const Icon = service.icon;
+            const Icon = serviceIcons[service.icon] ?? FiLayers;
             return (
-              <motion.article
-                key={service.title}
-                initial={{ opacity: 0, y: reduceMotion ? 0 : 38 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={reduceMotion ? undefined : { y: -9 }}
-                viewport={{ once: true, amount: .2 }}
-                transition={{ duration: .65, delay: (index % 2) * .1 }}
-                className={`service-card compact-service-card service-card-${service.accent}`}
+              <article
+                key={service.number}
+                className="service-card"
+                data-reveal="scale"
+                style={{ "--reveal-index": Math.min(index, 5) }}
               >
-                <div className="compact-service-top">
-                  <div className="compact-service-image">
-                    <Image src={service.image} alt="" fill sizes="88px" className="object-cover" />
-                  </div>
-                  <div className="compact-service-icon"><Icon /></div>
+                <div className="service-card-top">
+                  <span className="service-icon">
+                    <Icon aria-hidden="true" />
+                  </span>
                   <span className="service-number">{service.number}</span>
-                  <span className="compact-service-label">{service.shortTitle}</span>
                 </div>
-
-                <div className="service-card-copy">
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
-                  <ul>
-                    {service.deliverables.map((item) => <li key={item}><FiCheck /> {item}</li>)}
-                  </ul>
-                  <Link to="contact" smooth duration={700} offset={-100} className="service-cta cursor-pointer">
-                    Start a conversation
-                    <span><FiArrowRight /></span>
-                  </Link>
-                </div>
-                <div className="service-card-glow" aria-hidden="true" />
-              </motion.article>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <ul>
+                  {service.outcomes.map((outcome) => (
+                    <li key={outcome}>{outcome}</li>
+                  ))}
+                </ul>
+                <a href="#contact" className="service-link">
+                  Discuss this service
+                  <FiArrowRight aria-hidden="true" />
+                </a>
+              </article>
             );
           })}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="services-bottom-cta"
-        >
+        <div className="services-cta" data-reveal="up">
           <div>
-            <span>Have something different in mind?</span>
-            <h3>Custom requirements are welcome.</h3>
+            <p className="eyebrow">A different requirement?</p>
+            <h3>Tell me what the business needs to do. We can work out the software from there.</h3>
           </div>
-          <Link to="contact" smooth duration={700} offset={-100} className="services-bottom-button cursor-pointer">
-            Let’s build it <FiArrowRight />
-          </Link>
-        </motion.div>
+          <a className="button button-primary" href="#contact">
+            Discuss your project
+            <FiArrowRight aria-hidden="true" />
+          </a>
+        </div>
       </div>
+      <PointerGlow selector=".service-card" />
     </section>
   );
 }

@@ -1,34 +1,49 @@
 import { Outfit, Ovo } from "next/font/google";
 import "./globals.css";
-
-const siteUrl = "https://faizan-portfolio-site.vercel.app";
+import Navbar from "../../component/Navbar";
+import SideNav from "../../component/SideNav";
+import SiteFooter from "../../component/SiteFooter";
+import MotionController from "../../component/MotionController";
+import { site } from "@/data/site";
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-sans",
 });
 
 const ovo = Ovo({
   subsets: ["latin"],
   weight: ["400"],
+  display: "swap",
+  variable: "--font-serif",
 });
 
 export const metadata = {
-  metadataBase: new URL(siteUrl),
-  applicationName: "Faizan Engineer Portfolio",
+  metadataBase: new URL(site.url),
+  applicationName: `${site.name} Portfolio`,
   title: {
-    default: "Faizan Engineer | Full Stack .NET, ERP & POS Developer",
+    default: "Full Stack .NET Engineer | ERP, POS & Business Software — Faizan",
     template: "%s | Faizan Engineer",
   },
   description:
-    "Faizan is a full stack .NET developer in Pakistan building ERP, POS, accounting, desktop, web and mobile software with ASP.NET Core, Blazor, Angular and React.",
-  authors: [{ name: "Faizan Engineer", url: siteUrl }],
-  creator: "Faizan Engineer",
-  publisher: "Faizan Engineer",
-  category: "Software Development",
-  alternates: {
-    canonical: "/",
-  },
+    "Faizan is a full stack .NET engineer in Pakistan building ERP, POS, accounting and business software with C#, ASP.NET Core and SQL Server. Available for remote roles and selected freelance projects.",
+  authors: [{ name: site.legalName, url: site.url }],
+  creator: site.legalName,
+  publisher: site.name,
+  category: "Software Engineering",
+  keywords: [
+    "Full Stack .NET Developer",
+    "ASP.NET Core developer",
+    "ERP developer",
+    "POS software developer",
+    "SQL Server developer",
+    "C# engineer",
+    "business software",
+    "Pakistan software engineer",
+  ],
+  alternates: { canonical: "/" },
   robots: {
     index: true,
     follow: true,
@@ -44,17 +59,17 @@ export const metadata = {
     google: "LL0rJSNPuUzHzBPDOS7Lj_gz5SZGkktSN1tJ4cBAd0s",
   },
   openGraph: {
-    title: "Faizan Engineer | Full Stack .NET, ERP & POS Developer",
+    title: "Faizan Engineer — Full Stack .NET, ERP & POS Engineer",
     description:
-      "Explore ERP, POS, accounting, desktop and web software built by Faizan, a full stack .NET developer in Pakistan.",
-    url: siteUrl,
-    siteName: "Faizan Engineer Portfolio",
+      "Enterprise ERP, POS and accounting software built with C#, ASP.NET Core and SQL Server. Explore five detailed case studies.",
+    url: site.url,
+    siteName: `${site.name} Portfolio`,
     images: [
       {
-        url: "/assets/FaizanDpNew.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Faizan Engineer — Full Stack .NET, ERP and POS Developer",
+        alt: "Faizan Engineer — Full Stack .NET Engineer building ERP, POS and enterprise software",
       },
     ],
     locale: "en_US",
@@ -62,10 +77,10 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Faizan Engineer | Full Stack .NET Developer",
+    title: "Faizan Engineer — Full Stack .NET Engineer",
     description:
-      "ERP, POS, accounting, desktop and web software built with .NET, Blazor, Angular and React.",
-    images: ["/assets/FaizanDpNew.jpg"],
+      "ERP, POS and business software built with C#, ASP.NET Core and SQL Server. Five detailed case studies.",
+    images: ["/og-image.png"],
   },
   formatDetection: {
     email: false,
@@ -80,108 +95,103 @@ export default function RootLayout({ children }) {
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": `${siteUrl}/#website`,
-        url: siteUrl,
-        name: "Faizan Engineer Portfolio",
-        alternateName: "Faizan .NET Developer",
+        "@id": `${site.url}/#website`,
+        url: site.url,
+        name: `${site.name} Portfolio`,
+        alternateName: "Faizan .NET Engineer",
         description:
-          "Portfolio of Faizan, a full stack .NET developer specializing in ERP, POS and business software.",
+          "Portfolio of Muhammad Faizan, a full stack .NET engineer specializing in ERP, POS, accounting and business software.",
         inLanguage: "en",
-        publisher: { "@id": `${siteUrl}/#person` },
+        publisher: { "@id": `${site.url}/#person` },
       },
       {
         "@type": "ProfilePage",
-        "@id": `${siteUrl}/#profile`,
-        url: siteUrl,
-        name: "Faizan Engineer — Full Stack .NET Developer",
-        isPartOf: { "@id": `${siteUrl}/#website` },
-        mainEntity: { "@id": `${siteUrl}/#person` },
-        about: { "@id": `${siteUrl}/#person` },
+        "@id": `${site.url}/#profile`,
+        url: site.url,
+        name: "Faizan Engineer — Full Stack .NET Engineer",
+        isPartOf: { "@id": `${site.url}/#website` },
+        mainEntity: { "@id": `${site.url}/#person` },
+        about: { "@id": `${site.url}/#person` },
         inLanguage: "en",
       },
       {
         "@type": "Person",
-        "@id": `${siteUrl}/#person`,
-        name: "Faizan Engineer",
-        alternateName: ["Faizan .NET Developer", "Faizan Software Engineer"],
-        url: siteUrl,
-        image: `${siteUrl}/assets/FaizanDpNew.jpg`,
-        jobTitle: "Full Stack .NET Developer",
+        "@id": `${site.url}/#person`,
+        name: site.legalName,
+        alternateName: [site.name, "Faizan .NET Developer"],
+        url: site.url,
+        image: `${site.url}/assets/FaizanDpNew.jpg`,
+        jobTitle: "Full Stack .NET Engineer",
         description:
-          "Full stack .NET developer in Sindh, Pakistan with experience building ERP, POS, accounting, desktop, web and mobile applications.",
-        email: "mailto:engineerfaizan56@gmail.com",
-        telephone: "+92-318-9417122",
+          "Full stack .NET engineer in Sindh, Pakistan with 3+ years of experience building ERP, POS, accounting, desktop and web applications.",
+        email: `mailto:${site.email}`,
+        telephone: site.phone,
         address: {
           "@type": "PostalAddress",
           addressRegion: "Sindh",
           addressCountry: "PK",
         },
-        sameAs: [
-          "https://www.linkedin.com/in/faizan-memon122/",
-          "https://github.com/MFaizanMemmon",
-          "https://www.youtube.com/@faizanengineer8811",
-        ],
+        alumniOf: {
+          "@type": "CollegeOrUniversity",
+          name: "University of Sindh, Jamshoro",
+        },
+        sameAs: [site.linkedin, site.github, site.youtube],
         knowsAbout: [
           "C#",
           "ASP.NET Core",
+          "ASP.NET MVC",
+          "SQL Server",
+          "ADO.NET",
           "Blazor",
           "Angular",
-          "React",
-          "Next.js",
-          "SQL Server",
+          "JavaScript",
+          "WinForms",
           "ERP software",
           "Point of sale software",
           "Accounting software",
-          "Desktop application development",
-          "Mobile application development",
+          "Business process automation",
         ],
         hasOccupation: {
           "@type": "Occupation",
-          name: "Software Engineer",
+          name: "Full Stack .NET Engineer",
           occupationLocation: {
             "@type": "Country",
             name: "Pakistan",
           },
           skills:
-            "C#, ASP.NET Core, Web API, Blazor, Angular, React, Next.js, SQL Server, ERP and POS development",
+            "C#, ASP.NET Core, ASP.NET MVC, SQL Server, stored procedures, Blazor, Angular, WinForms, ERP and POS development",
         },
-        makesOffer: [
-          {
+        makesOffer: {
+          "@type": "OfferCatalog",
+          name: "Software development services",
+          itemListElement: [
+            "Custom ERP and business software",
+            "POS and inventory systems",
+            "ASP.NET Core web applications",
+            "Windows desktop applications",
+            "SQL Server development",
+            "Reporting and business automation",
+          ].map((name) => ({
             "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "ERP and POS Software Development",
-              description: "Custom ERP, point of sale, accounting and business management software.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Full Stack Web Application Development",
-              description: "Secure business web applications using ASP.NET Core, Blazor, Angular and React.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Desktop and Mobile Application Development",
-              description: "Custom Windows and cross-platform applications for business workflows.",
-            },
-          },
-        ],
+            itemOffered: { "@type": "Service", name },
+          })),
+        },
       },
     ],
   };
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        suppressHydrationWarning
-        className={`${outfit.className} ${ovo.className} antialiased`}
-      >
-        {children}
+      <body className={`${outfit.variable} ${ovo.variable} antialiased`}>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+        <div id="top" />
+        <MotionController />
+        <Navbar />
+        <main id="main-content">{children}</main>
+        <SideNav />
+        <SiteFooter />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

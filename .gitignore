@@ -40,3 +40,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local source screenshots and package caches (never deployed)
+/_source-assets/
+/.tmp/
+/.npm-cache/
+/.pnpm-cache/
+/.pnpm-store/

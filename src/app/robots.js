@@ -1,4 +1,4 @@
-const siteUrl = "https://faizan-portfolio-site.vercel.app";
+import { site } from "@/data/site";
 
 export default function robots() {
   return {
@@ -6,7 +6,7 @@ export default function robots() {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    sitemap: `${site.url}/sitemap.xml`,
+    host: site.url,
   };
 }
