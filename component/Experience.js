@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { FiArrowUpRight, FiCheck } from 'react-icons/fi';
 import { experience } from '@/data/site';
@@ -116,8 +117,29 @@ export default function Experience() {
                     {current && <span className="experience-current">Current</span>}
                   </div>
                   <div className="experience-content">
-                    <span className="experience-company">{role.company}</span>
-                    <h3>{role.role}</h3>
+                    <div className="experience-company-row">
+                      {role.logo ? (
+                        <Image
+                          src={role.logo}
+                          alt={`${role.company} logo`}
+                          width={48}
+                          height={48}
+                          className="experience-logo-image"
+                        />
+                      ) : (
+                        <span
+                          className="experience-logo experience-logo-fallback"
+                          role="img"
+                          aria-label={`${role.company} logo placeholder`}
+                        >
+                          {role.logoInitials}
+                        </span>
+                      )}
+                      <div className="experience-company-copy">
+                        <span className="experience-company">{role.company}</span>
+                        <h3>{role.role}</h3>
+                      </div>
+                    </div>
                     <p>{role.summary}</p>
                     <ul>
                       {role.highlights.map((highlight) => (

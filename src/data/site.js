@@ -32,6 +32,7 @@ export const experience = [
   {
     // Current engagement. Update the period/role wording if exact details change.
     company: "Tech Resources",
+    logoInitials: "TR",
     role: "Software Engineer",
     period: "Current role",
     location: "Pakistan",
@@ -45,6 +46,7 @@ export const experience = [
   },
   {
     company: "Freelance",
+    logoInitials: "FL",
     role: "Software Developer",
     period: "Ongoing",
     location: "Remote",
@@ -58,6 +60,7 @@ export const experience = [
   },
   {
     company: "Intrapreneur",
+    logoInitials: "IN",
     role: ".NET Developer",
     period: "Jan 2025 — Oct 2025",
     location: "Pakistan",
@@ -71,6 +74,7 @@ export const experience = [
   },
   {
     company: "Appsxone Solution",
+    logoInitials: "AX",
     role: ".NET MVC / Angular Developer",
     period: "2+ years",
     location: "Pakistan",
@@ -84,6 +88,7 @@ export const experience = [
   },
   {
     company: "BMC Solution",
+    logoInitials: "BMC",
     role: "Junior .NET Core Developer",
     period: "6 months",
     location: "Pakistan",

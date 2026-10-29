@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { FiMoon, FiSun } from "react-icons/fi";
 
 const STORAGE_KEY = "portfolio-theme";
@@ -12,22 +11,6 @@ function applyTheme(theme) {
 }
 
 export default function ThemeToggle() {
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-color-scheme: dark)");
-    const followSystem = () => {
-      try {
-        if (!window.localStorage.getItem(STORAGE_KEY)) {
-          applyTheme(query.matches ? "dark" : "light");
-        }
-      } catch {
-        // A blocked storage API should not break the theme toggle.
-      }
-    };
-
-    query.addEventListener("change", followSystem);
-    return () => query.removeEventListener("change", followSystem);
-  }, []);
-
   const toggle = () => {
     const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
     const next = current === "dark" ? "light" : "dark";

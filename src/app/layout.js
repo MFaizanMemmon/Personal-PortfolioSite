@@ -20,7 +20,7 @@ const ovo = Ovo({
   variable: "--font-ovo",
 });
 
-const themeScript = `(function(){try{var stored=localStorage.getItem("portfolio-theme");var dark=stored?stored==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";document.documentElement.style.colorScheme=dark?"dark":"light";}catch(e){document.documentElement.dataset.theme="light";}})();`;
+const themeScript = `(function(){try{var stored=localStorage.getItem("portfolio-theme");var dark=stored!=="light";document.documentElement.dataset.theme=dark?"dark":"light";document.documentElement.style.colorScheme=dark?"dark":"light";}catch(e){document.documentElement.dataset.theme="dark";document.documentElement.style.colorScheme="dark";}})();`;
 
 export const metadata = {
   metadataBase: new URL(site.url),
@@ -183,7 +183,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" style={{ colorScheme: "dark" }} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
