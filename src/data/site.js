@@ -1,3 +1,22 @@
+const FALLBACK_SITE_URL = "https://faizan-portfolio-site.vercel.app";
+
+function resolveSiteUrl() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!configured) return FALLBACK_SITE_URL;
+
+  try {
+    const url = new URL(configured);
+    const isLocal =
+      url.hostname === "localhost" ||
+      url.hostname === "127.0.0.1" ||
+      url.hostname === "0.0.0.0";
+    if (url.protocol !== "https:" || isLocal) return FALLBACK_SITE_URL;
+    return url.origin;
+  } catch {
+    return FALLBACK_SITE_URL;
+  }
+}
+
 export const site = {
   name: "Faizan Engineer",
   legalName: "Muhammad Faizan",
@@ -8,7 +27,8 @@ export const site = {
   whatsappDisplay: "0318 9417122",
   whatsapp: "https://wa.me/923189417122",
   location: "Sindh, Pakistan",
-  url: "https://faizan-portfolio-site.vercel.app",
+  serviceArea: "Remote delivery across Pakistan, including Hyderabad and Karachi",
+  url: resolveSiteUrl(),
   resume: "/assets/Faizan%20.Net%20Developer.pdf",
   linkedin: "https://www.linkedin.com/in/faizan-memon122/",
   github: "https://github.com/MFaizanMemmon",
@@ -177,6 +197,8 @@ export const services = [
   {
     number: "01",
     icon: "erp",
+    slug: "custom-erp-development",
+    imageAlt: "Business application interface used as a custom ERP development preview",
     title: "Custom ERP & Business Software",
     description:
       "One connected system for the work that currently lives across spreadsheets, paper registers and separate tools.",
@@ -189,6 +211,8 @@ export const services = [
   {
     number: "02",
     icon: "pos",
+    slug: "pos-software-development",
+    imageAlt: "Restaurant point of sale interface with product categories and order controls",
     title: "POS & Inventory Systems",
     description:
       "Fast counter sales and stock tracking for retail, wholesale and food businesses, with receipts that match the operation.",
@@ -201,6 +225,8 @@ export const services = [
   {
     number: "03",
     icon: "web",
+    slug: "aspnet-core-development",
+    imageAlt: "Web application layout used as an ASP.NET Core development preview",
     title: "ASP.NET Core Web Applications",
     description:
       "Secure, maintainable business applications and APIs built with the .NET stack and a database-first approach.",
@@ -213,6 +239,8 @@ export const services = [
   {
     number: "04",
     icon: "desktop",
+    slug: "windows-desktop-applications",
+    imageAlt: "Windows desktop business application interface used as a development preview",
     title: "Windows Desktop Applications",
     description:
       "Practical WinForms software for teams that need reliable local tools, direct hardware access or offline-friendly workflows.",
@@ -225,6 +253,8 @@ export const services = [
   {
     number: "05",
     icon: "database",
+    slug: "sql-server-development",
+    imageAlt: "SQL Server database interface used as a database development preview",
     title: "SQL Server Development",
     description:
       "Database design and query work that keeps transactional systems accurate as data and reporting needs grow.",
@@ -237,6 +267,8 @@ export const services = [
   {
     number: "06",
     icon: "report",
+    slug: "accounting-software-development",
+    imageAlt: "Accounting report interface used as a financial reporting development preview",
     title: "Reports & Business Automation",
     description:
       "Turn operational data into invoices, ledgers and summaries that people can act on without rebuilding the numbers by hand.",

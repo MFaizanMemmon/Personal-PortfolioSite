@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   FiArrowRight,
@@ -91,7 +92,7 @@ export default function Services() {
               >
                 <div className="compact-service-top">
                   <div className="compact-service-image">
-                    <Image src={serviceImages[service.icon]} alt="" fill sizes="88px" className="object-cover" />
+                    <Image src={serviceImages[service.icon]} alt={service.imageAlt} fill sizes="88px" className="object-cover" />
                   </div>
                   <div className="compact-service-icon"><Icon aria-hidden="true" /></div>
                   <span className="service-number">{service.number}</span>
@@ -99,15 +100,15 @@ export default function Services() {
                 </div>
 
                 <div className="service-card-copy">
-                  <h3>{service.title}</h3>
+                  <h3><Link href={`/services/${service.slug}`}>{service.title}</Link></h3>
                   <p>{service.description}</p>
                   <ul>
                     {service.outcomes.map((item) => <li key={item}><FiCheck aria-hidden="true" /> {item}</li>)}
                   </ul>
-                  <a href="#contact" className="service-cta">
-                    Start a conversation
+                  <Link href={`/services/${service.slug}`} className="service-cta">
+                    Explore service
                     <span><FiArrowRight /></span>
-                  </a>
+                  </Link>
                 </div>
                 <div className="service-card-glow" aria-hidden="true" />
               </motion.article>

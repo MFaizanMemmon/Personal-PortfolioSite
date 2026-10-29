@@ -82,10 +82,11 @@ const About = () => {
             <span className="about-eyebrow">Who I am</span>
             <h3>A developer who understands the business behind the code.</h3>
             <p>
-              I am a Full Stack <strong>.NET Developer</strong> from Pakistan with 3+ years of
-              experience building ERP, POS, and enterprise web applications. I have worked with
-              Tech Resources, BMC Solution, Appsxone Solution and Intrapreneur, while also
-              developing my own professional products.
+              I am Muhammad Faizan, a Full Stack <strong>.NET Developer</strong> based in Sindh,
+              Pakistan, with 3+ years of experience building ERP, POS, inventory, accounting and
+              enterprise web applications. I have worked with Tech Resources, BMC Solution,
+              Appsxone Solution and Intrapreneur, while also developing my own professional
+              products.
             </p>
             <p>
               I specialize in ASP.NET Core, Web APIs, Angular, Blazor, and React / Next.js, backed

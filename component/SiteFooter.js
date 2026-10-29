@@ -20,7 +20,7 @@ export default function SiteFooter() {
             <Link href="/#about">About</Link>
             <Link href="/#projects">Selected work</Link>
             <Link href="/#engineering">Engineering</Link>
-            <Link href="/#services">Services</Link>
+            <Link href="/services">Services</Link>
           </div>
           <div>
             <span>Direct</span>

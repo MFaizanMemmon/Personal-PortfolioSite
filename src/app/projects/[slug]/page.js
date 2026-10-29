@@ -17,6 +17,7 @@ import {
 } from "@/data/projects";
 import { blurDataURL, screenshotQuality } from "@/data/image";
 import { site } from "@/data/site";
+import { getServiceLinks } from "@/data/services";
 
 export const dynamicParams = false;
 
@@ -33,8 +34,17 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${project.title} — ${project.category} Case Study`,
+    title: project.seoTitle,
     description: project.seoDescription,
+    keywords: [
+      project.title,
+      project.category,
+      ...project.techGroups.flatMap((group) => group.items),
+      "Faizan Engineer",
+      "business software case study",
+    ],
+    category: project.category,
+    authors: [{ name: site.legalName, url: site.url }],
     alternates: {
       canonical: `/projects/${project.slug}`,
     },
@@ -70,19 +80,32 @@ export default async function ProjectPage({ params }) {
   const { previous, next } = getAdjacentProjects(project.slug);
   const heroImage = project.gallery[0];
   const index = projects.findIndex((item) => item.slug === project.slug) + 1;
+  const relatedServices = getServiceLinks(project.serviceSlugs ?? []);
 
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "CreativeWork",
-        "@id": `${site.url}/projects/${project.slug}/#project`,
+        "@type": "SoftwareApplication",
+        "@id": `${site.url}/projects/${project.slug}/#software`,
         name: project.title,
         description: project.seoDescription,
         url: `${site.url}/projects/${project.slug}`,
+        mainEntityOfPage: `${site.url}/projects/${project.slug}`,
+        applicationCategory: project.applicationCategory,
+        applicationSubCategory: project.category,
+        operatingSystem: project.platform,
         image: project.gallery.map((image) => `${site.url}${image.src}`),
-        genre: project.category,
-        keywords: project.techGroups.flatMap((group) => group.items).join(", "),
+        screenshot: project.gallery.map((image) => ({
+          "@type": "ImageObject",
+          url: `${site.url}${image.src}`,
+          caption: image.alt,
+        })),
+        featureList: project.features,
+        keywords: project.techGroups
+          .flatMap((group) => group.items)
+          .join(", "),
+        author: { "@id": `${site.url}/#person` },
         creator: { "@id": `${site.url}/#person` },
         isPartOf: { "@id": `${site.url}/#website` },
         inLanguage: "en",
@@ -234,6 +257,22 @@ export default async function ProjectPage({ params }) {
               </p>
             )}
           </div>
+
+          {relatedServices.length > 0 && (
+            <div className="case-study-sidebar-block">
+              <p className="eyebrow">Related services</p>
+              <ul className="service-link-list">
+                {relatedServices.map((service) => (
+                  <li key={service.slug}>
+                    <Link href={`/services/${service.slug}`}>
+                      {service.title}
+                      <FiArrowRight aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="case-study-sidebar-block">
             <p className="eyebrow">Note</p>

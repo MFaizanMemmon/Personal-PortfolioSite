@@ -7,6 +7,5 @@ export default function robots() {
       allow: "/",
     },
     sitemap: `${site.url}/sitemap.xml`,
-    host: site.url,
   };
 }

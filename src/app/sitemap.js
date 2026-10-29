@@ -1,4 +1,5 @@
 import { projects } from "@/data/projects";
+import { services } from "@/data/services";
 import { site } from "@/data/site";
 
 export default function sitemap() {
@@ -10,6 +11,13 @@ export default function sitemap() {
     changeFrequency: "monthly",
     priority: project.featured ? 0.9 : 0.75,
     images: project.gallery.slice(0, 4).map((image) => `${site.url}${image.src}`),
+  }));
+
+  const servicePages = services.map((service) => ({
+    url: `${site.url}/services/${service.slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.8,
   }));
 
   return [
@@ -25,6 +33,13 @@ export default function sitemap() {
         `${site.url}/assets/AnajPOS/Invoices.jpg`,
       ],
     },
+    {
+      url: `${site.url}/services`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    ...servicePages,
     ...projectPages,
   ];
 }
