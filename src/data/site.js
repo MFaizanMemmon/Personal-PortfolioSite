@@ -1,8 +1,8 @@
 export const site = {
   name: "Faizan Engineer",
   legalName: "Muhammad Faizan",
-  role: "Full Stack .NET Engineer",
-  headline: "Building ERP, POS & enterprise software",
+  role: "Full Stack .NET Developer",
+  headline: "Building reliable digital products from Pakistan",
   email: "engineerfaizan56@gmail.com",
   phone: "+92 318 9417122",
   whatsapp: "https://wa.me/923189417122",
@@ -20,8 +20,8 @@ export const site = {
 export const navigation = [
   { label: "About", href: "/#about", section: "about" },
   { label: "Experience", href: "/#experience", section: "experience" },
-  { label: "Stack", href: "/#stack", section: "stack" },
-  { label: "Work", href: "/#work", section: "work" },
+  { label: "Skills", href: "/#skills", section: "skills" },
+  { label: "Projects", href: "/#projects", section: "projects" },
   { label: "Engineering", href: "/#engineering", section: "engineering" },
   { label: "Writing", href: "/#writing", section: "writing" },
   { label: "Services", href: "/#services", section: "services" },
@@ -313,7 +313,7 @@ export const engineeringContext = [
 export const engineeringProcess = [
   { step: "01", title: "Requirements", detail: "Map the document and approval flow" },
   { step: "02", title: "Domain model", detail: "Define entities, states and business rules" },
-  { step: "03", title: "SQL schema", detail: "Tables, keys, stored procedures and constraints" },
+  { step: "03", title: "SQL database", detail: "Tables, keys, stored procedures and constraints" },
   { step: "04", title: "Application", detail: "C# services, MVC/API endpoints and validation" },
   { step: "05", title: "Interface", detail: "Fast entry screens, grids and printable documents" },
   { step: "06", title: "Reports", detail: "Ledgers, stock summaries and reconciliation" },

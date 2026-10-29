@@ -15,7 +15,7 @@ export default function SkillLegend() {
   const select = (value) => {
     const next = value === active ? "all" : value;
     setActive(next);
-    const section = document.getElementById("stack");
+    const section = document.getElementById("skills");
     if (!section) return;
     if (next === "all") {
       section.removeAttribute("data-skill-filter");

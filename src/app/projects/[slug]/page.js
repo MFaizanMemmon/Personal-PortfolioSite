@@ -9,6 +9,7 @@ import {
   FiLayers,
 } from "react-icons/fi";
 import ProjectGallery from "../../../../component/ProjectGallery";
+import SiteFooter from "../../../../component/SiteFooter";
 import {
   getAdjacentProjects,
   getProject,
@@ -100,7 +101,7 @@ export default async function ProjectPage({ params }) {
             "@type": "ListItem",
             position: 2,
             name: "Selected work",
-            item: `${site.url}/#work`,
+            item: `${site.url}/#projects`,
           },
           {
             "@type": "ListItem",
@@ -114,13 +115,14 @@ export default async function ProjectPage({ params }) {
   };
 
   return (
+    <div className="case-study-page">
     <article className="case-study">
       <div className="case-study-hero">
         <div className="section-shell">
           <nav className="breadcrumb" aria-label="Breadcrumb">
             <Link href="/">Home</Link>
             <span aria-hidden="true">/</span>
-            <Link href="/#work">Selected work</Link>
+            <Link href="/#projects">Selected work</Link>
             <span aria-hidden="true">/</span>
             <span aria-current="page">{project.title}</span>
           </nav>
@@ -138,7 +140,7 @@ export default async function ProjectPage({ params }) {
                   Discuss a similar project
                   <FiArrowRight aria-hidden="true" />
                 </Link>
-                <Link className="button button-secondary" href="/#work">
+                <Link className="button button-secondary" href="/#projects">
                   <FiArrowLeft aria-hidden="true" />
                   All projects
                 </Link>
@@ -341,6 +343,7 @@ export default async function ProjectPage({ params }) {
               <p>{project.note}</p>
               <ProjectGallery
                 images={project.gallery}
+                project={project}
                 projectTitle={project.title}
                 projectSlug={project.slug}
                 mode="grid"
@@ -424,5 +427,7 @@ export default async function ProjectPage({ params }) {
         }}
       />
     </article>
+    <SiteFooter />
+    </div>
   );
 }

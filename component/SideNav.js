@@ -1,120 +1,106 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { FiArrowUp, FiChevronDown } from "react-icons/fi";
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { Link, animateScroll as scroll } from 'react-scroll';
+import { FiArrowUp, FiChevronDown } from 'react-icons/fi';
+import { AnimatePresence, motion } from 'framer-motion';
 
-const sections = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "experience", label: "Experience" },
-  { id: "stack", label: "Stack" },
-  { id: "work", label: "Work" },
-  { id: "engineering", label: "Engineering" },
-  { id: "writing", label: "Writing" },
-  { id: "services", label: "Services" },
-  { id: "contact", label: "Contact" },
+const links = [
+  'Home',
+  'About',
+  'Experience',
+  'Skills',
+  'Projects',
+  'Engineering',
+  'Writing',
+  'Services',
+  'Contact',
 ];
 
-export default function SideNav() {
+const SideNav = () => {
   const pathname = usePathname();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [atEnd, setAtEnd] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [currentSection, setCurrentSection] = useState('Home');
+  const [atLast, setAtLast] = useState(false);
 
   useEffect(() => {
-    if (pathname !== "/") return undefined;
-    let frame = 0;
+    if (pathname !== '/') return undefined;
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight / 2;
+      let active = 'Home';
 
-    const update = () => {
-      frame = 0;
-      const anchor = window.scrollY + window.innerHeight * 0.42;
-      let index = 0;
-
-      sections.forEach((section, sectionIndex) => {
-        const element = document.getElementById(section.id);
-        if (
-          element &&
-          anchor >= element.offsetTop &&
-          anchor < element.offsetTop + element.offsetHeight
-        ) {
-          index = sectionIndex;
+      links.forEach((section) => {
+        const element = document.getElementById(section.toLowerCase());
+        if (element && scrollPos >= element.offsetTop && scrollPos < element.offsetTop + element.offsetHeight) {
+          active = section;
         }
       });
 
-      setCurrentIndex(index);
-
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0);
-      setAtEnd(
-        window.scrollY + window.innerHeight >=
-          document.documentElement.scrollHeight - 80,
-      );
+      setCurrentSection(active);
+      const lastSection = document.getElementById('contact');
+      setAtLast(Boolean(lastSection && lastSection.getBoundingClientRect().top < window.innerHeight / 2));
     };
 
-    const onScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    update();
-
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, [pathname]);
 
-  const next = sections[Math.min(currentIndex + 1, sections.length - 1)];
+  if (pathname !== '/') return null;
 
-  if (pathname !== "/") return null;
-
-  if (atEnd) {
-    return (
-      <button
-        type="button"
-        className="side-nav back-to-top"
-        onClick={() => {
-          const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-          window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-        }}
-        aria-label="Back to top"
-      >
-        <span>
-          <small>Back to</small>
-          <strong>Top</strong>
-        </span>
-        <i>
-          <FiArrowUp aria-hidden="true" />
-        </i>
-        <svg className="side-nav-ring" viewBox="0 0 40 40" aria-hidden="true">
-          <circle cx="20" cy="20" r="17" />
-          <circle
-            className="side-nav-ring-value"
-            cx="20"
-            cy="20"
-            r="17"
-            style={{ strokeDashoffset: `${107 - progress * 107}` }}
-          />
-        </svg>
-      </button>
-    );
-  }
+  const currentIndex = links.indexOf(currentSection);
+  const nextSection = links[Math.min(currentIndex + 1, links.length - 1)];
 
   return (
-    <a className="side-nav" href={`#${next.id}`} aria-label={`Go to ${next.label} section`}>
-      <span>
-        <small>Next</small>
-        <strong>{next.label}</strong>
-      </span>
-      <i>
-        <FiChevronDown aria-hidden="true" />
-      </i>
-      <span className="side-nav-progress" aria-hidden="true">
-        <span style={{ transform: `scaleX(${progress})` }} />
-      </span>
-    </a>
+    <motion.div
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.8, duration: 0.6 }}
+      className="section-navigator fixed bottom-5 right-4 z-50 sm:bottom-7 sm:right-7"
+    >
+      <AnimatePresence mode="wait">
+        {!atLast ? (
+          <motion.div key="next" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <Link
+              to={nextSection.toLowerCase()}
+              smooth
+              duration={700}
+              offset={-100}
+              className="section-nav-button cursor-pointer"
+              aria-label={`Scroll to ${nextSection}`}
+            >
+              <span className="section-nav-copy">
+                <small>Next</small>
+                <strong>{nextSection}</strong>
+              </span>
+              <span className="section-nav-icon"><FiChevronDown /></span>
+            </Link>
+          </motion.div>
+        ) : (
+          <motion.button
+            key="top"
+            type="button"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => scroll.scrollToTop({ duration: 700 })}
+            className="section-nav-button"
+            aria-label="Back to top"
+          >
+            <span className="section-nav-copy">
+              <small>Back to</small>
+              <strong>Top</strong>
+            </span>
+            <span className="section-nav-icon"><FiArrowUp /></span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
-}
+};
+
+export default SideNav;

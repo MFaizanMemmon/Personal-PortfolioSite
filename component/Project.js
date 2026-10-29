@@ -1,196 +1,133 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FiArrowRight, FiArrowUpRight, FiCheck } from "react-icons/fi";
-import PointerGlow from "./PointerGlow";
-import ProjectGallery from "./ProjectGallery";
-import { projects } from "@/data/projects";
-import { blurDataURL, screenshotQuality } from "@/data/image";
+'use client';
 
-function ProjectTagList({ project }) {
-  const tags = project.techGroups.flatMap((group) => group.items).slice(0, 4);
-  return (
-    <ul className="project-tags" aria-label={`Technologies used in ${project.title}`}>
-      {tags.map((tag) => (
-        <li key={tag}>{tag}</li>
-      ))}
-    </ul>
-  );
-}
-
-function ProjectCard({ project, index }) {
-  return (
-    <article
-      className="project-card"
-      data-reveal="up"
-      style={{ "--reveal-index": Math.min(index, 4) }}
-    >
-      <Link
-        className="project-card-visual"
-        href={`/projects/${project.slug}`}
-        aria-label={`View the ${project.title} case study`}
-      >
-        <Image
-          src={project.cardImage}
-          alt={project.cardAlt}
-          fill
-          sizes="(max-width: 800px) 100vw, 50vw"
-          quality={screenshotQuality}
-          placeholder="blur"
-          blurDataURL={blurDataURL}
-          className="project-card-image"
-        />
-        <span className="project-index">{String(index + 1).padStart(2, "0")}</span>
-        <span className="project-card-overlay" aria-hidden="true">
-          <span>
-            View case study
-            <FiArrowUpRight />
-          </span>
-        </span>
-      </Link>
-      <div className="project-card-body">
-        <p className="project-category">{project.category}</p>
-        <h3>
-          <Link href={`/projects/${project.slug}`}>{project.title}</Link>
-        </h3>
-        <p>{project.summary}</p>
-        <ul className="project-feature-list">
-          {project.features.slice(0, 3).map((feature) => (
-            <li key={feature}>
-              <FiCheck aria-hidden="true" />
-              {feature}
-            </li>
-          ))}
-        </ul>
-        <ProjectTagList project={project} />
-        <div className="project-card-actions">
-          <Link className="text-link" href={`/projects/${project.slug}`}>
-            View case study
-            <FiArrowRight aria-hidden="true" />
-          </Link>
-          <ProjectGallery
-            images={project.gallery}
-            projectTitle={project.title}
-            projectSlug={project.slug}
-            mode="trigger"
-          />
-        </div>
-      </div>
-    </article>
-  );
-}
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
+import { FiArrowUpRight, FiCheck, FiGrid, FiImage } from 'react-icons/fi';
+import ProjectGallery from './ProjectGallery';
+import { projects } from '@/data/projects';
+import { blurDataURL, screenshotQuality } from '@/data/image';
 
 export default function Project() {
-  const featured = projects.find((project) => project.featured);
-  const others = projects.filter((project) => !project.featured);
+  const reduceMotion = useReducedMotion();
+
+  const handlePointerMove = (event) => {
+    if (reduceMotion || event.pointerType === 'touch') return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty('--projects-x', `${event.clientX - rect.left}px`);
+    event.currentTarget.style.setProperty('--projects-y', `${event.clientY - rect.top}px`);
+  };
 
   return (
-    <section id="work" className="section section-work">
-      <div className="section-shell">
-        <div className="section-heading work-heading" data-reveal="up">
-          <p className="eyebrow">Selected work</p>
-          <div className="work-heading-row">
-            <h2>
-              Systems built around <em>how the work actually happens.</em>
-            </h2>
-            <div className="work-heading-note">
-              <span>05 case studies</span>
+    <section
+      id="projects"
+      onPointerMove={handlePointerMove}
+      className="projects-section relative overflow-hidden px-6 py-24 md:px-20 md:py-28"
+    >
+      <div className="projects-spotlight" aria-hidden="true" />
+      <div className="projects-orb projects-orb-one" aria-hidden="true" />
+      <div className="projects-orb projects-orb-two" aria-hidden="true" />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          className="projects-heading"
+        >
+          <div className="section-kicker"><span /> Selected work</div>
+          <div className="projects-title-row">
+            <h2>Products built around<br /><em>real business needs.</em></h2>
+            <div className="projects-heading-note">
+              <span><FiGrid /> 05 case studies</span>
               <p>
-                ERP, POS, accounting, desktop utilities and web applications. Every project
-                below uses screenshots from the real build.
+                Desktop, web, ERP and operational systems designed to make complex work feel
+                simple. Every screenshot comes from a working build, with client identifiers
+                redacted.
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {featured && (
-          <article className="featured-project" data-reveal="scale">
-            <Link
-              className="featured-visual"
-              href={`/projects/${featured.slug}`}
-              aria-label={`View the ${featured.title} case study`}
-            >
-              <Image
-                src={featured.cardImage}
-                alt={featured.cardAlt}
-                fill
-                sizes="(max-width: 900px) 100vw, 60vw"
-                quality={screenshotQuality}
-                placeholder="blur"
-                blurDataURL={blurDataURL}
-                className="featured-image"
-              />
-              <span className="featured-badge">Flagship project</span>
-              <span className="featured-visual-note">
-                <span>Enterprise ERP</span>
-                <p>Sales · Purchasing · Inventory · Ledger</p>
-              </span>
-              <span className="featured-overlay" aria-hidden="true">
-                <span>
-                  Open case study
-                  <FiArrowUpRight />
-                </span>
-              </span>
-            </Link>
-
-            <div className="featured-body">
-              <p className="project-category">{featured.category}</p>
-              <h3>{featured.title}</h3>
-              <p className="featured-summary">{featured.summary}</p>
-
-              <div className="featured-flow" aria-label="Core ERP transaction flow">
-                {featured.workflow.map((item, index) => (
-                  <div key={item.title}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <strong>{item.title}</strong>
-                  </div>
-                ))}
-              </div>
-
-              <ul className="featured-features">
-                {featured.features.slice(0, 5).map((feature) => (
-                  <li key={feature}>
-                    <FiCheck aria-hidden="true" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <ProjectTagList project={featured} />
-
-              <div className="featured-actions">
-                <Link className="button button-primary" href={`/projects/${featured.slug}`}>
-                  Read the ERP case study
-                  <FiArrowUpRight aria-hidden="true" />
+        <div className="projects-showcase">
+          {projects.map((project, index) => {
+            const tags = project.techGroups.flatMap((group) => group.items).slice(0, 4);
+            const featured = Boolean(project.featured);
+            return (
+              <motion.article
+                key={project.slug}
+                initial={{ opacity: 0, y: 38 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={reduceMotion ? undefined : { y: -8 }}
+                viewport={{ once: true, amount: 0.16 }}
+                transition={{ duration: 0.65, delay: (index % 3) * 0.08 }}
+                className={`project-showcase-card project-card-${index + 1} ${featured ? 'is-featured' : ''}`}
+              >
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="project-visual"
+                  aria-label={`View the ${project.title} case study`}
+                >
+                  <Image
+                    src={project.cardImage}
+                    alt={project.cardAlt}
+                    fill
+                    sizes={
+                      index === 2
+                        ? '(max-width: 900px) 100vw, 90vw'
+                        : index === 0 || index === 3
+                          ? '(max-width: 900px) 100vw, 64vw'
+                          : '(max-width: 900px) 100vw, 36vw'
+                    }
+                    quality={screenshotQuality}
+                    placeholder="blur"
+                    blurDataURL={blurDataURL}
+                    className="object-cover object-top"
+                  />
+                  <span className="project-visual-overlay" aria-hidden="true" />
+                  <span className="project-count">{String(index + 1).padStart(2, '0')}</span>
+                  {featured && <span className="project-featured-badge">Flagship project</span>}
+                  <span className="project-gallery-count"><FiImage /> {project.gallery.length} screens</span>
+                  <span className="project-open" aria-hidden="true">
+                    <FiArrowUpRight />
+                  </span>
                 </Link>
-                <ProjectGallery
-                  images={featured.gallery}
-                  projectTitle={featured.title}
-                  projectSlug={featured.slug}
-                  mode="trigger"
-                />
-              </div>
-            </div>
-          </article>
-        )}
 
-        <div className="project-grid" data-reveal-group>
-          {others.map((project, index) => (
-            <ProjectCard key={project.slug} project={project} index={index + 1} />
-          ))}
-        </div>
+                <div className="project-body">
+                  <span className="project-category">{project.category}</span>
+                  <h3>
+                    <Link href={`/projects/${project.slug}`}>{project.title}</Link>
+                  </h3>
+                  <p>{project.summary}</p>
+                  <div className="project-tags">
+                    {tags.map((tag) => <span key={tag}>{tag}</span>)}
+                  </div>
 
-        <div className="work-note" data-reveal="up">
-          <p>
-            Screenshots are from working builds. Customer names, contact details and connection
-            information have been redacted before publication.
-          </p>
-          <a className="text-link" href="#engineering">
-            See how I engineer these systems
-            <FiArrowRight aria-hidden="true" />
-          </a>
+                  <ul className="project-card-features">
+                    {project.features.slice(0, 3).map((feature) => (
+                      <li key={feature}><FiCheck aria-hidden="true" /> {feature}</li>
+                    ))}
+                  </ul>
+
+                  <div className="project-card-links">
+                    <Link href={`/projects/${project.slug}`} className="project-case-link">
+                      View case study
+                      <FiArrowUpRight aria-hidden="true" />
+                    </Link>
+                    <ProjectGallery
+                      images={project.gallery}
+                      project={project}
+                      projectTitle={project.title}
+                      projectSlug={project.slug}
+                      mode="trigger"
+                    />
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
       </div>
-      <PointerGlow selector=".project-card" />
     </section>
   );
 }

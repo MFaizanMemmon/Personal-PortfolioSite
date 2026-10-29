@@ -47,3 +47,27 @@ next-env.d.ts
 /.npm-cache/
 /.pnpm-cache/
 /.pnpm-store/
+
+
+# Temporary Python scripts
+.contact_sheets.py
+.extract_pdf.py
+.image_sizes.py
+.process_images.py
+
+# Temporary screenshots
+baseline-desktop.png
+
+# Dependencies and build files
+node_modules/
+.next/
+.next-dev/
+.npm-cache/
+.pnpm-cache/
+.pnpm-store/
+.tmp/
+
+# Environment secrets
+.env
+.env.*
+!.env.example

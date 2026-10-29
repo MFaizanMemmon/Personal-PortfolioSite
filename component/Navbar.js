@@ -1,281 +1,214 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { FiArrowUpRight, FiDownload, FiMenu, FiX } from "react-icons/fi";
-import { navigation, site } from "@/data/site";
+import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { FiArrowDown, FiDownload, FiMenu, FiX } from 'react-icons/fi';
+import ThemeToggle from './ThemeToggle';
+
+const links = [
+  { label: 'Home', id: 'home' },
+  { label: 'About', id: 'about' },
+  { label: 'Experience', id: 'experience' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Engineering', id: 'engineering' },
+  { label: 'Services', id: 'services' },
+  { label: 'Contact', id: 'contact' },
+];
+
+const mobileLinks = [
+  ...links.slice(0, 7),
+  { label: 'Writing', id: 'writing' },
+  links[7],
+];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
+  const reduceMotion = useReducedMotion();
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [pill, setPill] = useState({ left: 0, width: 0, visible: false });
-  const menuRef = useRef(null);
-  const toggleRef = useRef(null);
-  const navListRef = useRef(null);
+  const [activeLink, setActiveLink] = useState('home');
 
-  const onHome = pathname === "/";
-  const activeId = pathname.startsWith("/projects/")
-    ? "work"
-    : onHome
-      ? activeSection
-      : "";
-
-  const scrollToHash = useCallback((hash) => {
-    const target = document.getElementById(hash);
-    if (!target) return;
-    const cssOffset = Number.parseFloat(
-      getComputedStyle(document.documentElement).scrollPaddingTop,
-    );
-    const offset = Number.isFinite(cssOffset) ? cssOffset : 96;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({
-      top: target.getBoundingClientRect().top + window.scrollY - offset,
-      behavior: reduceMotion ? "auto" : "smooth",
-    });
-    window.history.replaceState(null, "", `/#${hash}`);
-  }, []);
-
-  const handleAnchor = useCallback(
-    (event, href) => {
-      if (!onHome) return;
-      const hash = href.split("#")[1];
-      if (!hash) return;
-      event.preventDefault();
-      if (menuOpen) {
-        setMenuOpen(false);
-        window.setTimeout(() => scrollToHash(hash), 70);
-      } else {
-        scrollToHash(hash);
-      }
-    },
-    [menuOpen, onHome, scrollToHash],
-  );
+  const onHome = pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 28);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 36);
 
-  useEffect(() => {
-    if (!onHome) return undefined;
-
-    const sections = ["home", ...navigation.map((item) => item.section)]
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActiveSection(visible.target.id);
-      },
-      { rootMargin: "-36% 0px -46% 0px", threshold: [0, 0.12, 0.3] },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, [onHome]);
-
-  // Keep the active-item pill aligned with the current section.
-  useEffect(() => {
-    const updatePill = () => {
-      const list = navListRef.current;
-      const active = list?.querySelector("a.is-active");
-      if (!list || !active) {
-        setPill((current) => ({ ...current, visible: false }));
+      if (!onHome) {
+        setActiveLink(pathname.startsWith('/projects/') ? 'projects' : '');
         return;
       }
-      setPill({
-        left: active.offsetLeft,
-        width: active.offsetWidth,
-        visible: true,
+
+      const scrollPosition = window.scrollY + Math.min(window.innerHeight * 0.36, 280);
+      let current = 'home';
+
+      [...links, { id: 'writing' }].forEach((link) => {
+        const section = document.getElementById(link.id);
+        if (
+          section &&
+          scrollPosition >= section.offsetTop &&
+          scrollPosition < section.offsetTop + section.offsetHeight
+        ) {
+          current = link.id;
+        }
       });
+
+      setActiveLink(current);
     };
 
-    updatePill();
-    const frame = window.requestAnimationFrame(updatePill);
-    const observer = new ResizeObserver(updatePill);
-    if (navListRef.current) observer.observe(navListRef.current);
-    window.addEventListener("resize", updatePill);
-    document.fonts?.ready.then(updatePill).catch(() => {});
-
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     return () => {
-      window.cancelAnimationFrame(frame);
-      observer.disconnect();
-      window.removeEventListener("resize", updatePill);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
-  }, [activeId, pathname]);
+  }, [onHome, pathname]);
 
   useEffect(() => {
-    if (!menuOpen) return undefined;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const focusTimer = window.setTimeout(() => {
-      menuRef.current?.querySelector("a")?.focus();
-    }, 40);
-
-    const getFocusable = () =>
-      Array.from(
-        menuRef.current?.querySelectorAll("a[href], button:not([disabled])") ?? [],
-      ).filter((node) => node.offsetParent !== null);
+    if (!isOpen) return undefined;
 
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-        toggleRef.current?.focus();
-        return;
-      }
-      if (event.key !== "Tab") return;
-      const focusable = getFocusable();
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
+      if (event.key === 'Escape') setIsOpen(false);
     };
 
-    const handleResize = () => {
-      if (window.innerWidth > 1080) setMenuOpen(false);
-    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
-    document.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.clearTimeout(focusTimer);
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [menuOpen]);
+  const scrollToSection = useCallback(
+    (event, id) => {
+      if (!onHome) return;
+      const section = document.getElementById(id);
+      if (!section) return;
+      event.preventDefault();
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({
+        top: section.getBoundingClientRect().top + window.scrollY - 96,
+        behavior: reduce ? 'auto' : 'smooth',
+      });
+      window.history.replaceState(null, '', `/#${id}`);
+      setIsOpen(false);
+    },
+    [onHome],
+  );
 
-  const closeMenu = () => setMenuOpen(false);
+  const goHome = (event) => {
+    if (!onHome) return;
+    event.preventDefault();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    window.history.replaceState(null, '', '/');
+    setIsOpen(false);
+  };
 
   return (
-    <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
-      <div className="nav-shell">
-        <Link
-          href="/"
-          className="brand"
-          aria-label="Faizan Engineer — home"
-          onClick={(event) => {
-            if (!onHome) return;
-            event.preventDefault();
-            const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-            window.history.replaceState(null, "", "/");
-          }}
-        >
-          <span className="brand-mark" aria-hidden="true">
-            F
+    <motion.nav
+      initial={{ opacity: 0, y: -24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      className={`portfolio-nav fixed inset-x-0 top-0 z-50 ${scrolled ? 'is-scrolled' : ''}`}
+      aria-label="Primary navigation"
+    >
+      <div className="portfolio-nav-shell">
+        <Link href="/" onClick={goHome} className="portfolio-brand" aria-label="Faizan Engineer — home">
+          <span className="portfolio-wordmark">
+            Faizan<span>.</span>
           </span>
-          <span className="brand-copy">
-            <strong>Faizan</strong>
-            <small>Full Stack .NET Engineer</small>
-          </span>
+          <span className="portfolio-wordmark-badge">.NET DEV</span>
         </Link>
 
-        <nav className="desktop-nav" aria-label="Primary navigation">
-          <span
-            className="nav-pill"
-            aria-hidden="true"
-            style={{
-              width: pill.width,
-              opacity: pill.visible ? 1 : 0,
-              transform: `translate3d(${pill.left}px, -50%, 0)`,
-            }}
-          />
-          <ul ref={navListRef}>
-            {navigation.map((item) => (
-              <li key={item.section}>
+        <ul className="portfolio-nav-links">
+          {links.map((link) => {
+            const active = activeLink === link.id;
+            return (
+              <li key={link.id}>
                 <Link
-                  href={item.href}
-                  className={activeId === item.section ? "is-active" : undefined}
-                  aria-current={activeId === item.section ? "location" : undefined}
-                  onClick={(event) => handleAnchor(event, item.href)}
+                  href={`/#${link.id}`}
+                  onClick={(event) => scrollToSection(event, link.id)}
+                  className={`portfolio-nav-link ${active ? 'is-active' : ''}`}
+                  aria-current={active ? 'location' : undefined}
                 >
-                  {item.label}
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      className="portfolio-nav-active-pill"
+                      transition={{ type: 'spring', stiffness: 430, damping: 34 }}
+                    />
+                  )}
+                  <span>{link.label}</span>
                 </Link>
               </li>
-            ))}
-          </ul>
-        </nav>
+            );
+          })}
+        </ul>
 
-        <div className="nav-actions">
-          <a className="nav-resume" href={site.resume} download>
-            <FiDownload aria-hidden="true" />
+        <div className="portfolio-nav-actions">
+          <ThemeToggle />
+          <a href="/assets/Faizan%20.Net%20Developer.pdf" download className="portfolio-cv" aria-label="Download resume" title="Download resume">
+            <FiDownload />
             <span>Resume</span>
+            <span className="portfolio-cv-arrow"><FiArrowDown /></span>
           </a>
-          <Link
-            className="nav-contact"
-            href="/#contact"
-            onClick={(event) => handleAnchor(event, "/#contact")}
-          >
-            <span>Let&apos;s talk</span>
-            <FiArrowUpRight aria-hidden="true" />
-          </Link>
+
           <button
-            ref={toggleRef}
             type="button"
-            className={`menu-toggle ${menuOpen ? "is-open" : ""}`}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
-            onClick={() => setMenuOpen((open) => !open)}
+            onClick={() => setIsOpen((open) => !open)}
+            className="portfolio-menu-button"
+            aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={isOpen}
+            aria-controls="portfolio-mobile-menu"
           >
-            <FiX className="menu-icon-close" aria-hidden="true" />
-            <FiMenu className="menu-icon-open" aria-hidden="true" />
+            {isOpen ? <FiX /> : <FiMenu />}
           </button>
         </div>
       </div>
 
-      <div
-        id="mobile-navigation"
-        ref={menuRef}
-        className={`mobile-nav ${menuOpen ? "is-open" : ""}`}
-        aria-hidden={menuOpen ? undefined : "true"}
-      >
-        <div className="mobile-nav-inner">
-          <p className="mobile-nav-label">Navigate the portfolio</p>
-          <ul>
-            {navigation.map((item, index) => (
-              <li key={item.section} style={{ "--menu-index": index }}>
-                <Link
-                  href={item.href}
-                  onClick={(event) => {
-                    handleAnchor(event, item.href);
-                    closeMenu();
-                  }}
-                >
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{item.label}</strong>
-                  <FiArrowUpRight aria-hidden="true" />
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="mobile-nav-footer">
-            <a href={site.resume} download onClick={closeMenu}>
-              <FiDownload aria-hidden="true" /> Download resume
-            </a>
-            <a href={`mailto:${site.email}`} onClick={closeMenu}>
-              {site.email}
-            </a>
-          </div>
-        </div>
-      </div>
-    </header>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id="portfolio-mobile-menu"
+            initial={reduceMotion ? false : { opacity: 0, y: -12, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: reduceMotion ? 0 : 0.25 }}
+            className="portfolio-mobile-menu"
+          >
+            <div className="portfolio-mobile-menu-head">
+              <span>Navigate</span>
+              <small>Portfolio sections</small>
+            </div>
+            <ul>
+              {mobileLinks.map((link, index) => (
+                <li key={link.id}>
+                  <Link
+                    href={`/#${link.id}`}
+                    onClick={(event) => {
+                      scrollToSection(event, link.id);
+                      setIsOpen(false);
+                    }}
+                    className={activeLink === link.id ? 'is-active' : ''}
+                  >
+                    <span className="mobile-nav-number">{String(index + 1).padStart(2, '0')}</span>
+                    <strong>{link.label}</strong>
+                    <span className="mobile-nav-dot" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="portfolio-mobile-menu-foot">
+              <ThemeToggle />
+              <a href="/assets/Faizan%20.Net%20Developer.pdf" download className="portfolio-mobile-cv">
+                <span><FiDownload /> Download resume</span>
+                <FiArrowDown />
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 }

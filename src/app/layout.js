@@ -1,34 +1,36 @@
 import { Outfit, Ovo } from "next/font/google";
 import "./globals.css";
 import Navbar from "../../component/Navbar";
-import SideNav from "../../component/SideNav";
-import SiteFooter from "../../component/SiteFooter";
 import MotionController from "../../component/MotionController";
+import MotionProvider from "../../component/MotionProvider";
+import SideNav from "../../component/SideNav";
 import { site } from "@/data/site";
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-outfit",
 });
 
 const ovo = Ovo({
   subsets: ["latin"],
   weight: ["400"],
   display: "swap",
-  variable: "--font-serif",
+  variable: "--font-ovo",
 });
+
+const themeScript = `(function(){try{var stored=localStorage.getItem("portfolio-theme");var dark=stored?stored==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";document.documentElement.style.colorScheme=dark?"dark":"light";}catch(e){document.documentElement.dataset.theme="light";}})();`;
 
 export const metadata = {
   metadataBase: new URL(site.url),
   applicationName: `${site.name} Portfolio`,
   title: {
-    default: "Full Stack .NET Engineer | ERP, POS & Business Software — Faizan",
+    default: "Faizan Engineer | Full Stack .NET, ERP & POS Developer",
     template: "%s | Faizan Engineer",
   },
   description:
-    "Faizan is a full stack .NET engineer in Pakistan building ERP, POS, accounting and business software with C#, ASP.NET Core and SQL Server. Available for remote roles and selected freelance projects.",
+    "Faizan is a full stack .NET developer in Pakistan building ERP, POS, accounting and business software with C#, ASP.NET Core and SQL Server. Available for remote roles and selected freelance projects.",
   authors: [{ name: site.legalName, url: site.url }],
   creator: site.legalName,
   publisher: site.name,
@@ -59,7 +61,7 @@ export const metadata = {
     google: "LL0rJSNPuUzHzBPDOS7Lj_gz5SZGkktSN1tJ4cBAd0s",
   },
   openGraph: {
-    title: "Faizan Engineer — Full Stack .NET, ERP & POS Engineer",
+    title: "Faizan Engineer — Full Stack .NET, ERP & POS Developer",
     description:
       "Enterprise ERP, POS and accounting software built with C#, ASP.NET Core and SQL Server. Explore five detailed case studies.",
     url: site.url,
@@ -77,7 +79,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Faizan Engineer — Full Stack .NET Engineer",
+    title: "Faizan Engineer — Full Stack .NET Developer",
     description:
       "ERP, POS and business software built with C#, ASP.NET Core and SQL Server. Five detailed case studies.",
     images: ["/og-image.png"],
@@ -108,7 +110,7 @@ export default function RootLayout({ children }) {
         "@type": "ProfilePage",
         "@id": `${site.url}/#profile`,
         url: site.url,
-        name: "Faizan Engineer — Full Stack .NET Engineer",
+        name: "Faizan Engineer — Full Stack .NET Developer",
         isPartOf: { "@id": `${site.url}/#website` },
         mainEntity: { "@id": `${site.url}/#person` },
         about: { "@id": `${site.url}/#person` },
@@ -121,9 +123,9 @@ export default function RootLayout({ children }) {
         alternateName: [site.name, "Faizan .NET Developer"],
         url: site.url,
         image: `${site.url}/assets/FaizanDpNew.jpg`,
-        jobTitle: "Full Stack .NET Engineer",
+        jobTitle: "Full Stack .NET Developer",
         description:
-          "Full stack .NET engineer in Sindh, Pakistan with 3+ years of experience building ERP, POS, accounting, desktop and web applications.",
+          "Full stack .NET developer in Sindh, Pakistan with 3+ years of experience building ERP, POS, accounting, desktop and web applications.",
         email: `mailto:${site.email}`,
         telephone: site.phone,
         address: {
@@ -182,16 +184,20 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${outfit.variable} ${ovo.variable} antialiased`}>
-        <a className="skip-link" href="#main-content">
-          Skip to content
-        </a>
-        <div id="top" />
-        <MotionController />
-        <Navbar />
-        <main id="main-content">{children}</main>
-        <SideNav />
-        <SiteFooter />
+        <MotionProvider>
+          <a className="skip-link" href="#main-content">
+            Skip to content
+          </a>
+          <div id="top" />
+          <MotionController />
+          <Navbar />
+          <main id="main-content">{children}</main>
+          <SideNav />
+        </MotionProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

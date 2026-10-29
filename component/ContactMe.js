@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   FiAlertCircle,
   FiArrowUpRight,
@@ -9,52 +10,62 @@ import {
   FiLinkedin,
   FiMail,
   FiMapPin,
-  FiMessageSquare,
+  FiMessageCircle,
   FiSend,
   FiUser,
   FiYoutube,
-} from "react-icons/fi";
-import { site } from "@/data/site";
+} from 'react-icons/fi';
+import { site } from '@/data/site';
 
-const initialValues = { name: "", email: "", message: "" };
+const initialValues = { name: '', email: '', message: '' };
+
+const contactDetails = [
+  { label: 'Email me', value: site.email, href: `mailto:${site.email}`, icon: FiMail },
+  { label: 'Call or WhatsApp', value: site.phone, href: site.whatsapp, icon: FiMessageCircle },
+  { label: 'Based in', value: site.location, icon: FiMapPin },
+];
 
 const socials = [
-  { label: "LinkedIn", href: site.linkedin, icon: FiLinkedin },
-  { label: "GitHub", href: site.github, icon: FiGithub },
-  { label: "YouTube", href: site.youtube, icon: FiYoutube },
+  { label: 'LinkedIn', href: site.linkedin, icon: FiLinkedin },
+  { label: 'GitHub', href: site.github, icon: FiGithub },
+  { label: 'YouTube', href: site.youtube, icon: FiYoutube },
 ];
 
 function validate(values) {
   const errors = {};
-  if (values.name.trim().length < 2) {
-    errors.name = "Please enter your name.";
-  }
+  if (values.name.trim().length < 2) errors.name = 'Please enter your name.';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email.trim())) {
-    errors.email = "Enter a valid email address, such as you@company.com.";
+    errors.email = 'Enter a valid email address, such as you@company.com.';
   }
   if (values.message.trim().length < 20) {
-    errors.message = "Please add at least 20 characters about the project or problem.";
+    errors.message = 'Please add at least 20 characters about the project or problem.';
   }
   return errors;
 }
 
 export default function ContactMe() {
+  const reduceMotion = useReducedMotion();
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle");
-  const [feedback, setFeedback] = useState("");
-  const honeypotRef = useRef(null);
+  const [status, setStatus] = useState('idle');
+  const [feedback, setFeedback] = useState('');
   const formRef = useRef(null);
+  const honeypotRef = useRef(null);
+
+  const handlePointerMove = (event) => {
+    if (reduceMotion || event.pointerType === 'touch') return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty('--contact-x', `${event.clientX - rect.left}px`);
+    event.currentTarget.style.setProperty('--contact-y', `${event.clientY - rect.top}px`);
+  };
 
   const updateField = (event) => {
     const { name, value } = event.target;
     setValues((current) => ({ ...current, [name]: value }));
-    if (errors[name]) {
-      setErrors((current) => ({ ...current, [name]: undefined }));
-    }
-    if (status === "error" || status === "success") {
-      setStatus("idle");
-      setFeedback("");
+    if (errors[name]) setErrors((current) => ({ ...current, [name]: undefined }));
+    if (status === 'error' || status === 'success') {
+      setStatus('idle');
+      setFeedback('');
     }
   };
 
@@ -65,107 +76,120 @@ export default function ContactMe() {
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
-      setStatus("error");
-      setFeedback("Please correct the highlighted fields and try again.");
+      setStatus('error');
+      setFeedback('Please correct the highlighted fields and try again.');
       const firstError = Object.keys(nextErrors)[0];
       formRef.current?.querySelector(`[name="${firstError}"]`)?.focus();
       return;
     }
 
     if (honeypotRef.current?.value) {
-      setStatus("success");
-      setFeedback("Thank you. Your message has been received.");
+      setStatus('success');
+      setFeedback('Thank you. Your message has been received.');
       setValues(initialValues);
       return;
     }
 
-    setStatus("loading");
-    setFeedback("");
+    setStatus('loading');
+    setFeedback('');
 
     try {
       const response = await fetch(form.action, {
-        method: "POST",
+        method: 'POST',
         body: new FormData(form),
-        headers: { Accept: "application/json" },
+        headers: { Accept: 'application/json' },
       });
 
-      if (!response.ok) {
-        throw new Error(`Form submission failed with status ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Form submission failed with status ${response.status}`);
 
-      setStatus("success");
-      setFeedback("Thank you. Your message has been sent.");
+      setStatus('success');
+      setFeedback('Thank you. Your message has been sent.');
       setValues(initialValues);
       form.reset();
     } catch {
-      setStatus("error");
-      setFeedback(
-        "I could not confirm the message was sent. Please email me directly at engineerfaizan56@gmail.com.",
-      );
+      setStatus('error');
+      setFeedback(`I could not confirm the message was sent. Please email me directly at ${site.email}.`);
     }
   };
 
   return (
-    <section id="contact" className="section section-contact">
-      <div className="section-shell">
-        <div className="contact-heading" data-reveal="up">
-          <p className="eyebrow">Start a conversation</p>
-          <div className="contact-heading-row">
-            <h2>
-              Have a business problem <em>worth solving?</em>
-            </h2>
+    <section
+      id="contact"
+      onPointerMove={handlePointerMove}
+      className="contact-section relative overflow-hidden px-6 pt-24 md:px-20 md:pt-28"
+    >
+      <div className="contact-spotlight" aria-hidden="true" />
+      <div className="contact-orb contact-orb-one" aria-hidden="true" />
+      <div className="contact-orb contact-orb-two" aria-hidden="true" />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          className="contact-heading"
+        >
+          <div className="section-kicker"><span /> Start a conversation</div>
+          <div className="contact-title-row">
+            <h2>Have an idea?<br /><em>Let&apos;s make it real.</em></h2>
             <div className="contact-availability">
-              <span className="pulse-dot" aria-hidden="true" />
+              <span className="contact-status-dot" />
               <div>
                 <small>Current availability</small>
-                <strong>Remote roles &amp; select freelance projects</strong>
+                <strong>Remote roles &amp; selected freelance projects</strong>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="contact-layout">
-          <aside className="contact-info" data-reveal="left">
-            <p className="contact-info-lead">
-              Tell me what the system needs to do, who uses it and what is failing today. A
-              short description of the workflow is more useful than a long list of
-              technologies.
-            </p>
+          <motion.div
+            initial={{ opacity: 0, x: -35 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            className="contact-info-panel"
+          >
+            <div className="contact-intro">
+              <span>Let&apos;s work together</span>
+              <h3>Tell me about the problem you want to solve.</h3>
+              <p>
+                Whether it&apos;s a business application, a customer-facing platform, or an idea
+                that needs shaping, I&apos;d be happy to hear about it.
+              </p>
+            </div>
 
-            <div className="contact-direct">
-              <a href={`mailto:${site.email}`}>
-                <span>
-                  <FiMail aria-hidden="true" />
-                </span>
-                <div>
-                  <small>Email</small>
-                  <strong>{site.email}</strong>
-                </div>
-                <FiArrowUpRight aria-hidden="true" />
-              </a>
-              <a href={site.whatsapp} target="_blank" rel="noopener noreferrer">
-                <span>
-                  <FiMessageSquare aria-hidden="true" />
-                </span>
-                <div>
-                  <small>WhatsApp</small>
-                  <strong>{site.phone}</strong>
-                </div>
-                <FiArrowUpRight aria-hidden="true" />
-              </a>
-              <div>
-                <span>
-                  <FiMapPin aria-hidden="true" />
-                </span>
-                <div>
-                  <small>Based in</small>
-                  <strong>{site.location}</strong>
-                </div>
-              </div>
+            <div className="contact-details">
+              {contactDetails.map((detail) => {
+                const Icon = detail.icon;
+                const content = (
+                  <>
+                    <span className="contact-detail-icon"><Icon /></span>
+                    <span className="contact-detail-copy">
+                      <small>{detail.label}</small>
+                      <strong>{detail.value}</strong>
+                    </span>
+                    {detail.href && <FiArrowUpRight className="contact-detail-arrow" />}
+                  </>
+                );
+
+                return detail.href ? (
+                  <a
+                    key={detail.label}
+                    href={detail.href}
+                    target={detail.href.startsWith('http') ? '_blank' : undefined}
+                    rel="noopener noreferrer"
+                    className="contact-detail"
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <div key={detail.label} className="contact-detail">{content}</div>
+                );
+              })}
             </div>
 
             <div className="contact-socials">
-              <p className="eyebrow">Elsewhere</p>
+              <span>Find me online</span>
               <div>
                 {socials.map((social) => {
                   const Icon = social.icon;
@@ -175,171 +199,148 @@ export default function ContactMe() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={social.label}
                     >
-                      <Icon aria-hidden="true" />
-                      {social.label}
+                      <Icon />
+                      <span>{social.label}</span>
                     </a>
                   );
                 })}
               </div>
             </div>
-          </aside>
+          </motion.div>
 
-          <form
+          <motion.form
             ref={formRef}
-            className="contact-form"
             action="https://formspree.io/f/mbdlnnyk"
             method="POST"
+            initial={{ opacity: 0, x: 35 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            className="contact-form"
             onSubmit={handleSubmit}
             noValidate
-            data-reveal="right"
           >
             <input type="hidden" name="_subject" value="New portfolio enquiry" />
             <div className="hp-field" aria-hidden="true">
               <label htmlFor="company-website">Leave this field empty</label>
-              <input
-                ref={honeypotRef}
-                id="company-website"
-                name="_gotcha"
-                type="text"
-                tabIndex="-1"
-                autoComplete="off"
-              />
+              <input ref={honeypotRef} id="company-website" name="_gotcha" type="text" tabIndex="-1" autoComplete="off" />
             </div>
 
-            <div className="contact-form-head">
-              <span>
-                <FiMessageSquare aria-hidden="true" />
-              </span>
+            <div className="contact-form-top">
+              <span className="contact-form-icon"><FiMessageCircle /></span>
               <div>
-                <p className="eyebrow">Project enquiry</p>
+                <small>Send a message</small>
                 <h3>What can I help you build?</h3>
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-field">
-                <label htmlFor="contact-name">
-                  Your name <span aria-hidden="true">*</span>
-                </label>
-                <div className={`input-wrap ${errors.name ? "has-error" : ""}`}>
+            <div className="contact-fields-row">
+              <label className="contact-field">
+                <span>Your name <b aria-hidden="true">*</b></span>
+                <div className={errors.name ? 'has-error' : ''}>
                   <FiUser aria-hidden="true" />
                   <input
                     id="contact-name"
-                    name="name"
                     type="text"
-                    autoComplete="name"
+                    name="name"
                     placeholder="Your full name"
+                    autoComplete="name"
                     value={values.name}
                     onChange={updateField}
                     aria-invalid={Boolean(errors.name)}
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                    required
+                    aria-describedby={errors.name ? 'contact-name-error' : undefined}
                   />
                 </div>
                 {errors.name && (
-                  <p className="field-error" id="name-error">
-                    <FiAlertCircle aria-hidden="true" />
-                    {errors.name}
-                  </p>
+                  <em className="contact-field-error" id="contact-name-error">
+                    <FiAlertCircle aria-hidden="true" /> {errors.name}
+                  </em>
                 )}
-              </div>
-
-              <div className="form-field">
-                <label htmlFor="contact-email">
-                  Email address <span aria-hidden="true">*</span>
-                </label>
-                <div className={`input-wrap ${errors.email ? "has-error" : ""}`}>
+              </label>
+              <label className="contact-field">
+                <span>Email address <b aria-hidden="true">*</b></span>
+                <div className={errors.email ? 'has-error' : ''}>
                   <FiMail aria-hidden="true" />
                   <input
                     id="contact-email"
-                    name="email"
                     type="email"
-                    inputMode="email"
-                    autoComplete="email"
+                    name="email"
                     placeholder="you@company.com"
+                    autoComplete="email"
                     value={values.email}
                     onChange={updateField}
                     aria-invalid={Boolean(errors.email)}
-                    aria-describedby={errors.email ? "email-error" : undefined}
-                    required
+                    aria-describedby={errors.email ? 'contact-email-error' : undefined}
                   />
                 </div>
                 {errors.email && (
-                  <p className="field-error" id="email-error">
-                    <FiAlertCircle aria-hidden="true" />
-                    {errors.email}
-                  </p>
+                  <em className="contact-field-error" id="contact-email-error">
+                    <FiAlertCircle aria-hidden="true" /> {errors.email}
+                  </em>
                 )}
-              </div>
+              </label>
             </div>
 
-            <div className="form-field">
-              <label htmlFor="contact-message">
-                Project or problem <span aria-hidden="true">*</span>
-              </label>
-              <div className={`input-wrap input-wrap-textarea ${errors.message ? "has-error" : ""}`}>
-                <FiMessageSquare aria-hidden="true" />
+            <label className="contact-field contact-message-field">
+              <span>Project details <b aria-hidden="true">*</b></span>
+              <div className={errors.message ? 'has-error' : ''}>
+                <FiMessageCircle aria-hidden="true" />
                 <textarea
                   id="contact-message"
                   name="message"
+                  placeholder="Tell me a little about your project, goals, and timeline…"
                   rows={6}
-                  placeholder="What does the business do, what needs to change, and who will use the software?"
                   value={values.message}
                   onChange={updateField}
                   aria-invalid={Boolean(errors.message)}
-                  aria-describedby={errors.message ? "message-error" : "message-help"}
-                  required
+                  aria-describedby={errors.message ? 'contact-message-error' : 'contact-message-help'}
                 />
               </div>
               {errors.message ? (
-                <p className="field-error" id="message-error">
-                  <FiAlertCircle aria-hidden="true" />
-                  {errors.message}
-                </p>
+                <em className="contact-field-error" id="contact-message-error">
+                  <FiAlertCircle aria-hidden="true" /> {errors.message}
+                </em>
               ) : (
-                <p className="field-help" id="message-help">
+                <em className="contact-field-help" id="contact-message-help">
                   A few sentences about the workflow is enough to start.
-                </p>
+                </em>
               )}
-            </div>
+            </label>
 
-            <div className="contact-form-foot">
-              <p>
-                Your message is sent through Formspree and goes directly to my inbox. I do not
-                publish or share enquiry details.
-              </p>
-              <button
-                type="submit"
-                className="button button-primary"
-                disabled={status === "loading"}
-                aria-disabled={status === "loading"}
-              >
-                {status === "loading" ? (
+            <div className="contact-form-footer">
+              <p><span /> I usually reply within one business day.</p>
+              <button type="submit" disabled={status === 'loading'}>
+                {status === 'loading' ? (
                   <>
-                    <span className="button-spinner" aria-hidden="true" />
                     Sending…
+                    <span className="contact-spinner" aria-hidden="true" />
                   </>
                 ) : (
                   <>
                     Send message
-                    <FiSend aria-hidden="true" />
+                    <span><FiSend /></span>
                   </>
                 )}
               </button>
             </div>
 
             <div
-              className={`form-feedback ${status === "success" ? "is-success" : ""} ${status === "error" ? "is-error" : ""}`}
+              className={`contact-feedback ${status === 'success' ? 'is-success' : ''} ${status === 'error' ? 'is-error' : ''}`}
               role="status"
               aria-live="polite"
             >
-              {status === "success" && <FiCheck aria-hidden="true" />}
-              {status === "error" && <FiAlertCircle aria-hidden="true" />}
+              {status === 'success' && <FiCheck aria-hidden="true" />}
+              {status === 'error' && <FiAlertCircle aria-hidden="true" />}
               {feedback && <p>{feedback}</p>}
             </div>
-          </form>
+          </motion.form>
         </div>
+
+        <footer className="portfolio-footer">
+          <span>© {new Date().getFullYear()} {site.name}</span>
+          <p>Designed and built with care in Pakistan.</p>
+        </footer>
       </div>
     </section>
   );

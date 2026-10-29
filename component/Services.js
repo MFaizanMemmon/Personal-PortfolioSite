@@ -1,14 +1,18 @@
+'use client';
+
+import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   FiArrowRight,
   FiBarChart2,
+  FiCheck,
   FiDatabase,
   FiGlobe,
   FiLayers,
   FiMonitor,
   FiShoppingBag,
-} from "react-icons/fi";
-import PointerGlow from "./PointerGlow";
-import { services } from "@/data/site";
+} from 'react-icons/fi';
+import { services } from '@/data/site';
 
 const serviceIcons = {
   erp: FiLayers,
@@ -19,73 +23,113 @@ const serviceIcons = {
   report: FiBarChart2,
 };
 
+const serviceImages = {
+  erp: '/assets/Skills/FullStack.jpg',
+  pos: '/assets/Restaurant_Management/POS.jpg',
+  web: '/assets/Skills/staticSite.jpg',
+  desktop: '/assets/Skills/winformapp.jpg',
+  database: '/assets/SqlServer.png',
+  report: '/assets/Skills/PDFLogo.png',
+};
+
+const accents = ['blue', 'violet', 'cyan', 'indigo', 'blue', 'violet'];
+
 export default function Services() {
+  const reduceMotion = useReducedMotion();
+
+  const handlePointerMove = (event) => {
+    if (reduceMotion || event.pointerType === 'touch') return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty('--services-x', `${event.clientX - rect.left}px`);
+    event.currentTarget.style.setProperty('--services-y', `${event.clientY - rect.top}px`);
+  };
+
   return (
-    <section id="services" className="section section-services">
-      <div className="section-shell">
-        <div className="section-heading services-heading" data-reveal="up">
-          <p className="eyebrow">Freelance services</p>
-          <div className="services-heading-row">
-            <h2>
-              Practical software for <em>specific business problems.</em>
-            </h2>
+    <section
+      id="services"
+      onPointerMove={handlePointerMove}
+      className="services-section relative overflow-hidden px-6 py-24 md:px-20 md:py-28"
+    >
+      <div className="services-spotlight" aria-hidden="true" />
+      <div className="services-shape services-shape-one" aria-hidden="true" />
+      <div className="services-shape services-shape-two" aria-hidden="true" />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 26 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          className="services-heading"
+        >
+          <div className="section-kicker"><span /> What I can build</div>
+          <div className="services-title-row">
+            <h2>From a business challenge<br />to a <em>finished product.</em></h2>
             <div>
-              <p className="section-intro">
-                I take on focused builds where the requirement is clear and the software has to
-                hold up in daily use. No guaranteed delivery dates or invented client metrics.
+              <p>
+                Thoughtful software across desktop, web, mobile and data — designed for the way
+                your business actually works.
               </p>
-              <a className="text-link" href="#contact">
-                Discuss your project
-                <FiArrowRight aria-hidden="true" />
+              <a href="#contact" className="services-heading-link">
+                Discuss your project <FiArrowRight />
               </a>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="service-grid" data-reveal-group>
+        <div className="services-grid">
           {services.map((service, index) => {
             const Icon = serviceIcons[service.icon] ?? FiLayers;
             return (
-              <article
+              <motion.article
                 key={service.number}
-                className="service-card"
-                data-reveal="scale"
-                style={{ "--reveal-index": Math.min(index, 5) }}
+                initial={{ opacity: 0, y: 38 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={reduceMotion ? undefined : { y: -9 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.65, delay: (index % 3) * 0.07 }}
+                className={`service-card compact-service-card service-card-${accents[index % accents.length]}`}
               >
-                <div className="service-card-top">
-                  <span className="service-icon">
-                    <Icon aria-hidden="true" />
-                  </span>
+                <div className="compact-service-top">
+                  <div className="compact-service-image">
+                    <Image src={serviceImages[service.icon]} alt="" fill sizes="88px" className="object-cover" />
+                  </div>
+                  <div className="compact-service-icon"><Icon aria-hidden="true" /></div>
                   <span className="service-number">{service.number}</span>
+                  <span className="compact-service-label">{service.title.split(' ')[0]}</span>
                 </div>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
-                <ul>
-                  {service.outcomes.map((outcome) => (
-                    <li key={outcome}>{outcome}</li>
-                  ))}
-                </ul>
-                <a href="#contact" className="service-link">
-                  Discuss this service
-                  <FiArrowRight aria-hidden="true" />
-                </a>
-              </article>
+
+                <div className="service-card-copy">
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                  <ul>
+                    {service.outcomes.map((item) => <li key={item}><FiCheck aria-hidden="true" /> {item}</li>)}
+                  </ul>
+                  <a href="#contact" className="service-cta">
+                    Start a conversation
+                    <span><FiArrowRight /></span>
+                  </a>
+                </div>
+                <div className="service-card-glow" aria-hidden="true" />
+              </motion.article>
             );
           })}
         </div>
 
-        <div className="services-cta" data-reveal="up">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="services-bottom-cta"
+        >
           <div>
-            <p className="eyebrow">A different requirement?</p>
-            <h3>Tell me what the business needs to do. We can work out the software from there.</h3>
+            <span>Have something different in mind?</span>
+            <h3>Custom requirements are welcome.</h3>
           </div>
-          <a className="button button-primary" href="#contact">
-            Discuss your project
-            <FiArrowRight aria-hidden="true" />
+          <a href="#contact" className="services-bottom-button">
+            Let&apos;s build it <FiArrowRight />
           </a>
-        </div>
+        </motion.div>
       </div>
-      <PointerGlow selector=".service-card" />
     </section>
   );
 }

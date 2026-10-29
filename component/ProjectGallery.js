@@ -1,40 +1,39 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   FiArrowRight,
   FiChevronLeft,
   FiChevronRight,
-  FiGrid,
+  FiImage,
   FiX,
-} from "react-icons/fi";
-import { blurDataURL, screenshotQuality } from "@/data/image";
+} from 'react-icons/fi';
+import { blurDataURL, screenshotQuality } from '@/data/image';
 
 const slide = {
-  enter: (direction) => ({ opacity: 0, x: direction > 0 ? 46 : -46, scale: 0.985 }),
+  enter: (direction) => ({ opacity: 0, x: direction > 0 ? 42 : -42, scale: 0.988 }),
   center: { opacity: 1, x: 0, scale: 1 },
-  exit: (direction) => ({ opacity: 0, x: direction > 0 ? -34 : 34, scale: 0.99 }),
+  exit: (direction) => ({ opacity: 0, x: direction > 0 ? -32 : 32, scale: 0.992 }),
 };
 
 const subscribeReducedMotion = (callback) => {
-  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-  query.addEventListener("change", callback);
-  return () => query.removeEventListener("change", callback);
+  const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+  query.addEventListener('change', callback);
+  return () => query.removeEventListener('change', callback);
 };
 
-const getReducedMotion = () =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
+const getReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const getServerReducedMotion = () => false;
 
 export default function ProjectGallery({
   images,
+  project,
   projectTitle,
   projectSlug,
-  mode = "grid",
+  mode = 'grid',
 }) {
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -49,6 +48,9 @@ export default function ProjectGallery({
   );
 
   const count = images.length;
+  const title = project?.title ?? projectTitle;
+  const slug = project?.slug ?? projectSlug;
+  const activeImage = images[activeIndex] ?? images[0];
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -57,7 +59,7 @@ export default function ProjectGallery({
     if (open) {
       if (!dialog.open) dialog.showModal();
       const previousOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
       const timer = window.setTimeout(() => closeButtonRef.current?.focus(), 40);
       return () => {
         window.clearTimeout(timer);
@@ -80,7 +82,7 @@ export default function ProjectGallery({
 
   const goTo = useCallback(
     (index) => {
-      if (count === 0) return;
+      if (!count) return;
       const next = ((index % count) + count) % count;
       setDirection(next >= activeIndex ? 1 : -1);
       setActiveIndex(next);
@@ -90,7 +92,7 @@ export default function ProjectGallery({
 
   const step = useCallback(
     (delta) => {
-      if (count === 0) return;
+      if (!count) return;
       setDirection(delta > 0 ? 1 : -1);
       setActiveIndex((current) => (((current + delta) % count) + count) % count);
     },
@@ -98,36 +100,34 @@ export default function ProjectGallery({
   );
 
   const handleKeyDown = (event) => {
-    if (event.key === "ArrowRight") {
+    if (event.key === 'ArrowRight') {
       event.preventDefault();
       step(1);
-    } else if (event.key === "ArrowLeft") {
+    } else if (event.key === 'ArrowLeft') {
       event.preventDefault();
       step(-1);
-    } else if (event.key === "Home") {
+    } else if (event.key === 'Home') {
       event.preventDefault();
       goTo(0);
-    } else if (event.key === "End") {
+    } else if (event.key === 'End') {
       event.preventDefault();
       goTo(count - 1);
     }
   };
 
-  const activeImage = images[activeIndex] ?? images[0];
-
   return (
-    <div className="gallery">
-      {mode === "grid" ? (
-        <ul className="gallery-grid" data-reveal-group>
+    <div className="project-gallery">
+      {mode === 'grid' ? (
+        <ul className="project-gallery-grid">
           {images.map((image, index) => (
-            <li key={`${image.src}-${index}`} data-reveal="scale">
+            <li key={`${image.src}-${index}`}>
               <button
                 type="button"
-                className="gallery-thumb"
+                className="project-gallery-thumb"
                 onClick={(event) => openAt(index, event.currentTarget)}
                 aria-label={`Open screenshot ${index + 1} of ${count}: ${image.caption}`}
               >
-                <span className="gallery-thumb-image">
+                <span className="project-gallery-thumb-image">
                   <Image
                     src={image.src}
                     alt={image.alt}
@@ -138,12 +138,12 @@ export default function ProjectGallery({
                     blurDataURL={blurDataURL}
                     className="object-cover"
                   />
-                  <span className="gallery-thumb-zoom" aria-hidden="true">
-                    <FiGrid />
+                  <span className="project-gallery-thumb-overlay" aria-hidden="true">
+                    <FiImage />
                   </span>
                 </span>
-                <span className="gallery-thumb-caption">
-                  <span>{String(index + 1).padStart(2, "0")}</span>
+                <span className="project-gallery-thumb-caption">
+                  <span>{String(index + 1).padStart(2, '0')}</span>
                   {image.caption}
                 </span>
               </button>
@@ -153,20 +153,20 @@ export default function ProjectGallery({
       ) : (
         <button
           type="button"
-          className="gallery-trigger"
+          className="project-gallery-trigger"
           onClick={(event) => openAt(0, event.currentTarget)}
         >
-          <FiGrid aria-hidden="true" />
-          View gallery
-          <span className="gallery-trigger-count">{count} screens</span>
-          <FiArrowRight className="gallery-trigger-arrow" aria-hidden="true" />
+          <FiImage aria-hidden="true" />
+          <span>View gallery</span>
+          <small>{count} screens</small>
+          <FiArrowRight aria-hidden="true" />
         </button>
       )}
 
       <dialog
         ref={dialogRef}
-        className="gallery-dialog"
-        aria-labelledby="gallery-dialog-title"
+        className="project-gallery-dialog"
+        aria-labelledby="project-gallery-title"
         onClose={() => {
           setOpen(false);
           triggerRef.current?.focus?.();
@@ -184,118 +184,143 @@ export default function ProjectGallery({
           if (outside) close();
         }}
       >
-        <div className="gallery-dialog-shell">
-          <div className="gallery-dialog-head">
+        <div className="project-gallery-shell">
+          <header className="project-gallery-head">
             <div>
-              <p className="eyebrow">Project gallery</p>
-              <h2 id="gallery-dialog-title">{projectTitle}</h2>
+              <span className="project-category">{project?.category ?? 'Project gallery'}</span>
+              <h2 id="project-gallery-title">{title}</h2>
             </div>
-            <div className="gallery-dialog-actions">
-              <span className="gallery-counter">
-                {String(activeIndex + 1).padStart(2, "0")} /{" "}
-                {String(count).padStart(2, "0")}
+            <div className="project-gallery-head-actions">
+              <span className="project-gallery-counter">
+                {String(activeIndex + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
               </span>
               <button
                 ref={closeButtonRef}
                 type="button"
-                className="gallery-close"
+                className="project-gallery-close"
                 onClick={close}
                 aria-label="Close project gallery"
               >
                 <FiX aria-hidden="true" />
               </button>
             </div>
-          </div>
+          </header>
 
-          <div className="gallery-stage">
-            <button
-              type="button"
-              className="gallery-nav gallery-nav-prev"
-              onClick={() => step(-1)}
-              aria-label="Previous screenshot"
-            >
-              <FiChevronLeft aria-hidden="true" />
-            </button>
-
-            <div className="gallery-stage-image">
-              <AnimatePresence initial={false} custom={direction} mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  className="gallery-slide"
-                  custom={direction}
-                  variants={slide}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{
-                    duration: reduceMotion ? 0 : 0.32,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  drag={reduceMotion ? false : "x"}
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.14}
-                  onDragEnd={(event, info) => {
-                    if (info.offset.x < -60 || info.velocity.x < -420) step(1);
-                    else if (info.offset.x > 60 || info.velocity.x > 420) step(-1);
-                  }}
-                >
-                  <Image
-                    src={activeImage.src}
-                    alt={activeImage.alt}
-                    fill
-                    sizes="(max-width: 900px) 94vw, 1100px"
-                    quality={screenshotQuality}
-                    placeholder="blur"
-                    blurDataURL={blurDataURL}
-                    className="object-contain"
-                    draggable={false}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <button
-              type="button"
-              className="gallery-nav gallery-nav-next"
-              onClick={() => step(1)}
-              aria-label="Next screenshot"
-            >
-              <FiChevronRight aria-hidden="true" />
-            </button>
-          </div>
-
-          <p className="gallery-caption" aria-live="polite">
-            {activeImage.caption}
-          </p>
-
-          <div className="gallery-dialog-foot">
-            <div className="gallery-thumbs" role="group" aria-label="Choose a screenshot">
-              {images.map((image, index) => (
+          <div className="project-gallery-body">
+            <div className="project-gallery-main">
+              <div className="project-gallery-stage">
                 <button
-                  key={`${image.src}-thumb-${index}`}
                   type="button"
-                  className={index === activeIndex ? "is-active" : undefined}
-                  onClick={() => goTo(index)}
-                  aria-label={`Show screenshot ${index + 1}: ${image.caption}`}
-                  aria-current={index === activeIndex ? "true" : undefined}
+                  className="project-gallery-nav project-gallery-nav-prev"
+                  onClick={() => step(-1)}
+                  aria-label="Previous screenshot"
                 >
-                  <span className="gallery-thumb-mini">
-                    <Image
-                      src={image.src}
-                      alt=""
-                      fill
-                      sizes="96px"
-                      quality={75}
-                      className="object-cover"
-                    />
-                  </span>
+                  <FiChevronLeft aria-hidden="true" />
                 </button>
-              ))}
+
+                <div className="project-gallery-stage-image">
+                  <AnimatePresence initial={false} custom={direction} mode="wait">
+                    <motion.div
+                      key={activeIndex}
+                      className="project-gallery-slide"
+                      custom={direction}
+                      variants={slide}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{
+                        duration: reduceMotion ? 0 : 0.32,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      drag={reduceMotion ? false : 'x'}
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.14}
+                      onDragEnd={(event, info) => {
+                        if (info.offset.x < -60 || info.velocity.x < -420) step(1);
+                        else if (info.offset.x > 60 || info.velocity.x > 420) step(-1);
+                      }}
+                    >
+                      <Image
+                        src={activeImage.src}
+                        alt={activeImage.alt}
+                        fill
+                        sizes="(max-width: 900px) 94vw, 900px"
+                        quality={screenshotQuality}
+                        placeholder="blur"
+                        blurDataURL={blurDataURL}
+                        className="object-contain"
+                        draggable={false}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                <button
+                  type="button"
+                  className="project-gallery-nav project-gallery-nav-next"
+                  onClick={() => step(1)}
+                  aria-label="Next screenshot"
+                >
+                  <FiChevronRight aria-hidden="true" />
+                </button>
+              </div>
+
+              <p className="project-gallery-caption" aria-live="polite">
+                {activeImage.caption}
+              </p>
+
+              <div className="project-gallery-thumbs" role="group" aria-label="Choose a screenshot">
+                {images.map((image, index) => (
+                  <button
+                    key={`${image.src}-thumb-${index}`}
+                    type="button"
+                    className={index === activeIndex ? 'is-active' : ''}
+                    onClick={() => goTo(index)}
+                    aria-label={`Show screenshot ${index + 1}: ${image.caption}`}
+                    aria-current={index === activeIndex ? 'true' : undefined}
+                  >
+                    <span>
+                      <Image
+                        src={image.src}
+                        alt=""
+                        fill
+                        sizes="90px"
+                        quality={75}
+                        className="object-cover"
+                      />
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
-            <Link href={`/projects/${projectSlug}`} className="text-link">
-              Read the full case study
-              <FiArrowRight aria-hidden="true" />
-            </Link>
+
+            <aside className="project-gallery-info">
+              <p className="project-gallery-summary">{project?.summary ?? 'Screenshots from the working application.'}</p>
+              {project?.features?.length > 0 && (
+                <>
+                  <h3>Core capabilities</h3>
+                  <ul className="project-gallery-features">
+                    {project.features.slice(0, 6).map((feature) => (
+                      <li key={feature}>
+                        <span aria-hidden="true" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {project?.techGroups?.length > 0 && (
+                <div className="project-tags">
+                  {project.techGroups.flatMap((group) => group.items).slice(0, 5).map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+              )}
+              <Link href={`/projects/${slug}`} className="project-gallery-case-link">
+                Read the full case study
+                <FiArrowRight aria-hidden="true" />
+              </Link>
+            </aside>
           </div>
         </div>
       </dialog>
