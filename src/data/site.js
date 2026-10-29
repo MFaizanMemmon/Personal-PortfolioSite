@@ -47,20 +47,6 @@ export const experience = [
     ],
   },
   {
-    company: "Freelance",
-    logoInitials: "FL",
-    role: "Software Developer",
-    period: "Ongoing",
-    location: "Remote",
-    summary:
-      "Designs and builds custom business applications for local companies across wheat trading, paint, entertainment, inventory and restaurant operations.",
-    highlights: [
-      "Gathers requirements directly from business owners and turns them into working software.",
-      "Builds desktop and web applications with SQL Server-backed operational workflows.",
-      "Handles delivery from data model and UI through deployment and user support.",
-    ],
-  },
-  {
     company: "Intrapreneur",
     logo: "/assets/company-logos/intrapreneur.jpg",
     logoInitials: "IN",
