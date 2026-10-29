@@ -16,12 +16,13 @@ import {
   FiYoutube,
 } from 'react-icons/fi';
 import { site } from '@/data/site';
+import { FaWhatsapp } from 'react-icons/fa';
 
 const initialValues = { name: '', email: '', message: '' };
 
 const contactDetails = [
   { label: 'Email me', value: site.email, href: `mailto:${site.email}`, icon: FiMail },
-  { label: 'Call or WhatsApp', value: site.phone, href: site.whatsapp, icon: FiMessageCircle },
+  { label: 'WhatsApp', value: site.whatsappDisplay, href: site.whatsapp, icon: FiMessageCircle },
   { label: 'Based in', value: site.location, icon: FiMapPin },
 ];
 
@@ -29,6 +30,7 @@ const socials = [
   { label: 'LinkedIn', href: site.linkedin, icon: FiLinkedin },
   { label: 'GitHub', href: site.github, icon: FiGithub },
   { label: 'YouTube', href: site.youtube, icon: FiYoutube },
+  { label: 'WhatsApp', href: site.whatsapp, icon: FaWhatsapp },
 ];
 
 function validate(values) {

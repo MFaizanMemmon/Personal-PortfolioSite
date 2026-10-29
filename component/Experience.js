@@ -122,8 +122,8 @@ export default function Experience() {
                         <Image
                           src={role.logo}
                           alt={`${role.company} logo`}
-                          width={48}
-                          height={48}
+                          width={56}
+                          height={56}
                           className="experience-logo-image"
                         />
                       ) : (

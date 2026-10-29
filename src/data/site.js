@@ -5,6 +5,7 @@ export const site = {
   headline: "Building reliable digital products from Pakistan",
   email: "engineerfaizan56@gmail.com",
   phone: "+92 318 9417122",
+  whatsappDisplay: "0318 9417122",
   whatsapp: "https://wa.me/923189417122",
   location: "Sindh, Pakistan",
   url: "https://faizan-portfolio-site.vercel.app",
@@ -32,6 +33,7 @@ export const experience = [
   {
     // Current engagement. Update the period/role wording if exact details change.
     company: "Tech Resources",
+    logo: "/assets/company-logos/tech-resources.jpg",
     logoInitials: "TR",
     role: "Software Engineer",
     period: "Current role",
@@ -60,6 +62,7 @@ export const experience = [
   },
   {
     company: "Intrapreneur",
+    logo: "/assets/company-logos/intrapreneur.jpg",
     logoInitials: "IN",
     role: ".NET Developer",
     period: "Jan 2025 — Oct 2025",
@@ -74,6 +77,7 @@ export const experience = [
   },
   {
     company: "Appsxone Solution",
+    logo: "/assets/company-logos/appsxone-solution.jpg",
     logoInitials: "AX",
     role: ".NET MVC / Angular Developer",
     period: "2+ years",
@@ -88,6 +92,7 @@ export const experience = [
   },
   {
     company: "BMC Solution",
+    logo: "/assets/company-logos/bmc-solution.jpg",
     logoInitials: "BMC",
     role: "Junior .NET Core Developer",
     period: "6 months",

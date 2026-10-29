@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FiArrowUp, FiGithub, FiLinkedin, FiMail, FiYoutube } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 import { site } from "@/data/site";
 
 export default function SiteFooter() {
@@ -27,6 +28,7 @@ export default function SiteFooter() {
             <a href={site.linkedin} target="_blank" rel="noopener noreferrer"><FiLinkedin aria-hidden="true" /> LinkedIn</a>
             <a href={site.github} target="_blank" rel="noopener noreferrer"><FiGithub aria-hidden="true" /> GitHub</a>
             <a href={site.youtube} target="_blank" rel="noopener noreferrer"><FiYoutube aria-hidden="true" /> YouTube</a>
+            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer"><FaWhatsapp aria-hidden="true" /> WhatsApp {site.whatsappDisplay}</a>
           </div>
         </div>
       </div>
