@@ -99,7 +99,8 @@ const About = () => {
             </p>
             <p>
               I specialize in ASP.NET Core, Web APIs, Angular, Blazor, and React / Next.js, backed
-              by strong experience in finance, accounting systems, and business automation.
+              by strong experience in finance, accounting systems, and business automation. I work
+              remotely with businesses across Pakistan, including Hyderabad and Karachi.
             </p>
             <div className="about-principle">
               <FiLayers />

@@ -130,7 +130,7 @@ export default function RootLayout({ children }) {
         image: `${site.url}/assets/FaizanDpNew.jpg`,
         jobTitle: "Full Stack .NET Developer",
         description:
-          "Full stack .NET developer in Sindh, Pakistan with 3+ years of experience building ERP, POS, inventory, accounting, desktop and web applications.",
+          "Full stack .NET developer in Sindh, Pakistan with 3+ years of experience building ERP, POS, inventory, accounting, desktop and web applications, working with businesses across Pakistan including Hyderabad and Karachi.",
         email: `mailto:${site.email}`,
         telephone: site.phone,
         address: {

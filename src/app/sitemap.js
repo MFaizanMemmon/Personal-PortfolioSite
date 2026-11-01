@@ -2,19 +2,23 @@ import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
 
+const absoluteUrl = (path) => new URL(path, `${site.url}/`).toString();
+
 export default function sitemap() {
   const lastModified = new Date();
 
   const projectPages = projects.map((project) => ({
-    url: `${site.url}/projects/${project.slug}`,
+    url: absoluteUrl(`/projects/${project.slug}`),
     lastModified,
     changeFrequency: "monthly",
     priority: project.featured ? 0.9 : 0.75,
-    images: project.gallery.slice(0, 4).map((image) => `${site.url}${image.src}`),
+    images: project.gallery
+      .slice(0, 4)
+      .map((image) => absoluteUrl(image.src)),
   }));
 
   const servicePages = services.map((service) => ({
-    url: `${site.url}/services/${service.slug}`,
+    url: absoluteUrl(`/services/${service.slug}`),
     lastModified,
     changeFrequency: "monthly",
     priority: 0.8,
@@ -27,14 +31,14 @@ export default function sitemap() {
       changeFrequency: "monthly",
       priority: 1,
       images: [
-        `${site.url}/assets/FaizanDpNew.jpg`,
-        `${site.url}/assets/Electron-Erp/Dashboard.jpg`,
-        `${site.url}/assets/Restaurant_Management/POS.jpg`,
-        `${site.url}/assets/AnajPOS/Invoices.jpg`,
+        absoluteUrl("/assets/FaizanDpNew.jpg"),
+        absoluteUrl("/assets/Electron-Erp/Dashboard.jpg"),
+        absoluteUrl("/assets/Restaurant_Management/POS.jpg"),
+        absoluteUrl("/assets/AnajPOS/Invoices.jpg"),
       ],
     },
     {
-      url: `${site.url}/services`,
+      url: absoluteUrl("/services"),
       lastModified,
       changeFrequency: "monthly",
       priority: 0.85,

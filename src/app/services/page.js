@@ -19,7 +19,7 @@ const heroProject = getProject("enterprise-erp");
 export const metadata = {
   title: "Software Development Services",
   description:
-    "Custom ERP, POS, inventory, accounting, ASP.NET Core, Windows desktop and SQL Server development services by Muhammad Faizan (Faizan Engineer) in Sindh, Pakistan. Remote delivery across Pakistan.",
+    "Custom ERP, POS, inventory, accounting, ASP.NET Core, Windows and SQL Server development by Faizan Engineer in Sindh, Pakistan.",
   alternates: { canonical: "/services" },
   keywords: [
     "custom software development services",
