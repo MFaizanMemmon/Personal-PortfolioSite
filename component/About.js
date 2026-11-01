@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
-import { FiAward, FiBookOpen, FiCode, FiLayers } from 'react-icons/fi';
+import { FiAward, FiBookOpen, FiCode, FiLayers, FiTerminal } from 'react-icons/fi';
 import { education, site } from '@/data/site';
 
 const tools = [
@@ -12,6 +12,15 @@ const tools = [
   { name: 'GitHub', src: '/assets/git.png' },
   { name: 'SQLite', src: '/assets/SqlLiteNew.png' },
   { name: 'Azure', src: '/assets/Azure.png' },
+];
+
+const aiTools = [
+  { name: 'Codex', slug: 'codex', logo: '/assets/ai-tools/codex-mark.png' },
+  { name: 'Claude Code', slug: 'claude-code', logo: '/assets/ai-tools/claude-code-mark.png' },
+  { name: 'DeepSeek Harness', slug: 'deepseek', logo: '/assets/ai-tools/deepseek-harness.png' },
+  { name: 'Antigravity', slug: 'antigravity', logo: '/assets/ai-tools/antigravity.png' },
+  { name: 'OpenCode', slug: 'opencode', logo: '/assets/ai-tools/opencode-mark.png' },
+  { name: 'Qoder', slug: 'qoder', logo: '/assets/ai-tools/qoder-mark.png' },
 ];
 
 const cards = [
@@ -162,21 +171,48 @@ const About = () => {
             <span>Everyday toolkit</span>
             <h3>Tools I use to ship</h3>
           </div>
-          <div className="tools-list">
-            {tools.map((tool, index) => (
-              <motion.div
-                key={tool.name}
-                whileHover={reduceMotion ? undefined : { y: -7, scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="tool-item"
-              >
-                <div className="tool-icon">
-                  <Image src={tool.src} alt="" width={38} height={38} className="object-contain" />
-                </div>
-                <span>{tool.name}</span>
-                <small>{String(index + 1).padStart(2, '0')}</small>
-              </motion.div>
-            ))}
+          <div className="tools-content">
+            <div className="tools-list">
+              {tools.map((tool, index) => (
+                <motion.div
+                  key={tool.name}
+                  whileHover={reduceMotion ? undefined : { y: -7, scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  className="tool-item"
+                >
+                  <div className="tool-icon">
+                    <Image src={tool.src} alt="" width={38} height={38} className="object-contain" />
+                  </div>
+                  <span>{tool.name}</span>
+                  <small>{String(index + 1).padStart(2, '0')}</small>
+                </motion.div>
+              ))}
+            </div>
+            <div className="tools-ai">
+              <span className="tools-ai-label"><FiTerminal aria-hidden="true" /> AI-assisted development</span>
+              <div className="tools-list tools-list-ai">
+                {aiTools.map((tool, index) => (
+                  <motion.div
+                    key={tool.name}
+                    whileHover={reduceMotion ? undefined : { y: -7, scale: 1.05 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    className="tool-item"
+                  >
+                    <div className={`tool-icon tool-icon-${tool.slug}`}>
+                      <Image
+                        src={tool.logo}
+                        alt={`${tool.name} logo`}
+                        width={38}
+                        height={38}
+                        className="object-contain"
+                      />
+                    </div>
+                    <span>{tool.name}</span>
+                    <small>{String(tools.length + index + 1).padStart(2, '0')}</small>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

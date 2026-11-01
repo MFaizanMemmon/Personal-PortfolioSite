@@ -154,6 +154,13 @@ export default function RootLayout({ children }) {
           "Angular",
           "JavaScript",
           "WinForms",
+          "AI-assisted development",
+          "Codex",
+          "Claude Code",
+          "DeepSeek Harness",
+          "Antigravity",
+          "OpenCode",
+          "Qoder",
           "Custom ERP development",
           "Point of sale software",
           "Inventory management software",
@@ -168,7 +175,7 @@ export default function RootLayout({ children }) {
             name: "Pakistan",
           },
           skills:
-            "C#, ASP.NET Core, ASP.NET MVC, SQL Server, stored procedures, Blazor, Angular, WinForms, custom ERP, POS and business software development",
+            "C#, ASP.NET Core, ASP.NET MVC, SQL Server, stored procedures, Blazor, Angular, WinForms, AI-assisted development, custom ERP, POS and business software development",
         },
         makesOffer: {
           "@type": "OfferCatalog",

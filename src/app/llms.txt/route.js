@@ -34,6 +34,8 @@ export function GET() {
     "",
     "C#, ASP.NET Core, ASP.NET MVC, Web API, SQL Server, ADO.NET, stored procedures, Blazor, Angular, JavaScript, TypeScript, WinForms, ERP, POS, inventory, accounting and business reporting.",
     "",
+    "AI-assisted development tools: Codex, Claude Code, DeepSeek Harness, Antigravity, OpenCode and Qoder.",
+    "",
     "## Verified public profiles",
     "",
     `- LinkedIn: ${site.linkedin}`,
